@@ -115,7 +115,7 @@ func main() {
 		case MINUS:
 			fmt.Println("MINUS - null")
 		case SEMICOLON:
-			fmt.Println("SEMICOLON : null")
+			fmt.Println("SEMICOLON ; null")
 		case SLASH:
 			fmt.Println("SLASH / null")
 		}

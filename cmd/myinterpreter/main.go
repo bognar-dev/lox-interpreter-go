@@ -70,10 +70,6 @@ type Scanner struct {
 	tokens []string
 }
 
-func scanToken() {
-
-}
-
 func main() {
 	// You can use print statements as follows for debugging, they"l be visible when running tests.
 	//fmt.Fprintln(os.Stderr, "Logs from your program will appear here!")
@@ -108,6 +104,15 @@ func main() {
 			fmt.Println("LEFT_BRACE { null")
 		case RIGHT_BRACE:
 			fmt.Println("RIGHT_BRACE } null")
+		case STAR:
+			fmt.Println("STAR * null")
+		case DOT:
+			fmt.Println("DOT . null")
+		case COMMA:
+			fmt.Println("COMMA , null")
+		case PLUS:
+			fmt.Println("PLUS + null")
+
 		}
 
 	}

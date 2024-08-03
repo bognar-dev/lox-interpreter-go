@@ -114,6 +114,10 @@ func main() {
 			fmt.Println("PLUS + null")
 		case MINUS:
 			fmt.Println("MINUS - null")
+		case SEMICOLON:
+			fmt.Println("SEMICOLON : null")
+		case SLASH:
+			fmt.Println("SLASH / null")
 		}
 
 	}

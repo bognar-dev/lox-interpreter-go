@@ -17,7 +17,7 @@ const (
 	DOT       TokenType = '.'
 	MINUS     TokenType = '-'
 	PLUS      TokenType = '+'
-	SEMICOLON TokenType = ':'
+	SEMICOLON TokenType = ';'
 	SLASH     TokenType = '/'
 	STAR      TokenType = '*'
 

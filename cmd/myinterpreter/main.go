@@ -93,6 +93,7 @@ func main() {
 		os.Exit(1)
 	}
 	fileContents := string(rawfileContents)
+	hasError := false
 	for _, current := range fileContents {
 		token := TokenType(current)
 		switch token {
@@ -120,7 +121,11 @@ func main() {
 			fmt.Println("SLASH / null")
 		default:
 			fmt.Println("[line 1] Error: Unexpected character: " + string(token))
+			hasError = true
 		}
 	}
 	fmt.Println("EOF  null")
+	if hasError {
+		os.Exit(65)
+	}
 }

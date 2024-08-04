@@ -64,41 +64,41 @@ const (
 func (t TokenType) toString() string {
 	switch t {
 	case LEFT_PAREN:
-		return "("
+		return "LEFT_PAREN"
 	case RIGHT_PAREN:
-		return ")"
+		return "RIGHT_PAREN"
 	case LEFT_BRACE:
-		return "{"
+		return "LEFT_BRACE"
 	case RIGHT_BRACE:
-		return "}"
+		return "RIGHT_BRACE"
 	case STAR:
-		return "*"
+		return "STAR"
 	case DOT:
-		return "."
+		return "DOT"
 	case COMMA:
-		return ","
+		return "COMMA"
 	case PLUS:
-		return "+"
+		return "PLUS"
 	case MINUS:
-		return "-"
+		return "MINUS"
 	case SEMICOLON:
-		return ";"
+		return "SEMICOLON"
 	case SLASH:
-		return "/"
+		return "SLASH"
 	case BANG:
-		return "!"
+		return "BANG"
 	case BANG_EQUAL:
-		return "!="
+		return "BANG_EQUAL"
 	case EQUAL:
-		return "="
+		return "EQUAL"
 	case EQUAL_EQUAL:
-		return "=="
+		return "EQUAL_EQUAL"
 	case GREATER:
-		return ">"
+		return "GREATER"
 	case GREATER_EQUAL:
-		return ">="
+		return "GREATER_EQUAL"
 	case LESS:
-		return "<"
+		return "LESS"
 	case LESS_EQUAL:
 		return "<="
 	case IDENTIFIER:
@@ -179,7 +179,7 @@ func (s *Scanner) peek() TokenType {
 }
 
 func (s *Scanner) addToken(token TokenType) {
-	s.tokens = append(s.tokens, Token{token, "", nil, s.line})
+	s.tokens = append(s.tokens, Token{token, s.peek().toString(), nil, s.line})
 }
 
 func (s *Scanner) isAtEnd() bool {

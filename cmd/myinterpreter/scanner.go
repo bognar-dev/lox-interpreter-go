@@ -200,29 +200,121 @@ func (s *Scanner) scanToken() {
 	c := s.advance()
 	switch c {
 	case LEFT_PAREN:
-		s.addToken(LEFT_PAREN)
+		s.addToken(c)
 	case RIGHT_PAREN:
-		s.addToken(RIGHT_PAREN)
+
+		s.addToken(c)
 	case LEFT_BRACE:
-		s.addToken(LEFT_BRACE)
+
+		s.addToken(c)
 	case RIGHT_BRACE:
-		s.addToken(RIGHT_BRACE)
+
+		s.addToken(c)
 	case STAR:
-		s.addToken(STAR)
+
+		s.addToken(c)
 	case DOT:
-		s.addToken(DOT)
+
+		s.addToken(c)
 	case COMMA:
-		s.addToken(COMMA)
+
+		s.addToken(c)
 	case PLUS:
-		s.addToken(PLUS)
+
+		s.addToken(c)
 	case MINUS:
-		s.addToken(MINUS)
+
+		s.addToken(c)
 	case SEMICOLON:
-		s.addToken(SEMICOLON)
+
+		s.addToken(c)
 	case SLASH:
-		s.addToken(SLASH)
+
+		s.addToken(c)
+	case BANG:
+
+		s.addToken(c)
+	case BANG_EQUAL:
+
+		s.addToken(c)
+	case EQUAL:
+
+		s.addToken(c)
+	case EQUAL_EQUAL:
+
+		s.addToken(c)
+	case GREATER:
+
+		s.addToken(c)
+	case GREATER_EQUAL:
+
+		s.addToken(c)
+	case LESS:
+
+		s.addToken(c)
+	case LESS_EQUAL:
+
+		s.addToken(c)
+	case IDENTIFIER:
+
+		s.addToken(c)
+	case STRING:
+
+		s.addToken(c)
+	case NUMBER:
+
+		s.addToken(c)
+	case AND:
+
+		s.addToken(c)
+	case CLASS:
+
+		s.addToken(c)
+	case ELSE:
+
+		s.addToken(c)
+	case FALSE:
+
+		s.addToken(c)
+	case FUN:
+
+		s.addToken(c)
+	case FOR:
+
+		s.addToken(c)
+	case IF:
+
+		s.addToken(c)
+	case NIL:
+
+		s.addToken(c)
+	case OR:
+
+		s.addToken(c)
+	case PRINT:
+
+		s.addToken(c)
+	case RETURN:
+
+		s.addToken(c)
+	case SUPER:
+
+		s.addToken(c)
+	case THIS:
+
+		s.addToken(c)
+	case TRUE:
+
+		s.addToken(c)
+	case VAR:
+
+		s.addToken(c)
+	case WHILE:
+
+		s.addToken(c)
 	case EOF:
-		s.addToken(EOF)
+
+		s.addToken(c)
 	default:
 		if s.errorMsg == nil {
 			s.errorMsg = fmt.Errorf("[line " + strconv.Itoa(s.line) + "] Error: Unexpected character: " + s.peek().toString())

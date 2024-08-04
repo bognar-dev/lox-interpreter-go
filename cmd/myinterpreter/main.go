@@ -34,6 +34,7 @@ func main() {
 	scanner := Scanner{source: source, tokens: []Token{}, start: 0, current: 0, line: 1, hasError: hasError}
 	tokens := scanner.scanTokens()
 	scanner.printTokens(tokens)
+	fmt.Println(scanner.hasError)
 	if scanner.hasError {
 		os.Exit(65)
 	}

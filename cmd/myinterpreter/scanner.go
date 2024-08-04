@@ -188,7 +188,7 @@ func (s *Scanner) isAtEnd() bool {
 func (s *Scanner) advance() TokenType {
 	s.current++
 
-	return TokenType(strconv.Itoa(int(s.source[s.current-1])))
+	return TokenType(s.source[s.current-1])
 }
 
 func (s *Scanner) printTokens(tokens []Token) {
@@ -199,9 +199,6 @@ func (s *Scanner) printTokens(tokens []Token) {
 
 func (s *Scanner) scanToken() {
 	c := s.advance()
-	if s.current > 1 {
-		fmt.Println(c)
-	}
 	switch c {
 	case LEFT_PAREN:
 		s.addToken(LEFT_PAREN)
@@ -228,7 +225,6 @@ func (s *Scanner) scanToken() {
 	case EOF:
 		s.addToken(EOF)
 	default:
-		fmt.Println("Default path")
 		if s.errorMsg == nil {
 			s.errorMsg = fmt.Errorf("[line " + strconv.Itoa(s.line) + "] Error: Unexpected character: " + s.peek().toString())
 		} else {

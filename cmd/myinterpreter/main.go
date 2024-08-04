@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 )
 
 var hasError = false
@@ -35,8 +34,8 @@ func main() {
 	scanner := Scanner{source: source, tokens: []Token{}, start: 0, current: 0, line: 1, hasError: hasError}
 	tokens := scanner.scanTokens()
 	print(tokens)
-	print("Has error: " + strconv.FormatBool(hasError))
 	if scanner.hasError {
+		print("Error")
 		os.Exit(65)
 	}
 }

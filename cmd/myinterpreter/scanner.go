@@ -135,7 +135,7 @@ func (s *Scanner) scanToken() {
 	case SLASH:
 		fmt.Println("SLASH / null")
 	default:
-		fmt.Println("[line 1] Error: Unexpected character: " + c)
+		fmt.Println("[line 1] Error: Unexpected character: " + TokenType(c))
 		hasError = true
 	}
 }

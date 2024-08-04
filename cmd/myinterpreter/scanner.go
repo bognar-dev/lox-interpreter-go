@@ -58,7 +58,9 @@ const (
 	VAR    TokenType = "var"
 	WHILE  TokenType = "while"
 
-	EOF TokenType = ""
+	EOF             TokenType = ""
+	NEWLINE                   = "\n"
+	WINDOWS_NEWLINE           = "\r\n"
 )
 
 func (t TokenType) toString() string {
@@ -228,6 +230,12 @@ func (s *Scanner) scanToken() {
 		s.addToken(SLASH)
 	case EOF:
 		s.addToken(EOF)
+	case NEWLINE:
+		s.line++
+		fmt.Println("New line " + strconv.Itoa(s.line))
+	case WINDOWS_NEWLINE:
+		s.line++
+		fmt.Println("Windows New line " + strconv.Itoa(s.line))
 	default:
 		s.errorList = append(s.errorList, fmt.Errorf("[line "+strconv.Itoa(s.line)+"] Error: Unexpected character: "+s.peek().toString()))
 

@@ -223,7 +223,7 @@ func (s *Scanner) scanToken() {
 	case SLASH:
 		s.addToken(SLASH)
 	default:
-		s.errorMsg = fmt.Errorf("[line 1] Error: Unexpected character: " + s.peek().toString())
+		s.errorMsg = fmt.Errorf("? [line 1] Error: Unexpected character: " + s.peek().toString())
 		s.hasError = true
 	}
 }

@@ -189,6 +189,13 @@ func (s *Scanner) advance() TokenType {
 	s.current++
 	return TokenType(strconv.Itoa(int(s.source[s.current-1])))
 }
+
+func (s *Scanner) printTokens(tokens []Token) {
+	for _, token := range tokens {
+		fmt.Println(token.toString())
+	}
+}
+
 func (s *Scanner) scanToken() {
 	c := s.advance()
 	switch c {

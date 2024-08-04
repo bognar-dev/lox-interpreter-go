@@ -62,7 +62,6 @@ func (s *Scanner) createString() {
 
 	// The closing ".
 	s.advance()
-	fmt.Println("PEEEEKK", s.peek())
 
 	// Trim the surrounding quotes.
 

@@ -175,7 +175,7 @@ func (s *Scanner) scanTokens() []Token {
 }
 
 func (s *Scanner) peek() TokenType {
-	return TokenType(strconv.Itoa(int(s.source[s.current])))
+	return TokenType(s.source[s.current-1 : s.current])
 }
 
 func (s *Scanner) addToken(token TokenType) {

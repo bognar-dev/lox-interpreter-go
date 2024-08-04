@@ -18,7 +18,7 @@ func (s *Scanner) scanTokens() ([]Token, []error) {
 		s.start = s.current
 		s.scanToken()
 	}
-	s.tokens = append(s.tokens, Token{EOF, "", nil, s.line})
+	s.tokens = append(s.tokens, Token{EOF, "", Literal{}, s.line})
 	return s.tokens, s.errorList
 }
 
@@ -30,8 +30,8 @@ func (s *Scanner) peekString() string {
 	return s.source[s.current-1 : s.current]
 }
 
-func (s *Scanner) addToken(token TokenType) {
-	s.tokens = append(s.tokens, Token{token, tokenLoopUp[token], nil, s.line})
+func (s *Scanner) addToken(token TokenType, literal Literal) {
+	s.tokens = append(s.tokens, Token{token, tokenLoopUp[token], literal, s.line})
 }
 
 func (s *Scanner) isAtEnd() bool {
@@ -45,6 +45,29 @@ func (s *Scanner) advance() TokenType {
 	s.current++
 
 	return TokenType(s.source[s.current-1])
+}
+
+func (s *Scanner) createString() {
+	for s.peek() != PARENTHESES && !s.isAtEnd() {
+		if s.peek() == NEWLINE {
+			s.line++
+		}
+		s.advance()
+	}
+
+	if s.isAtEnd() {
+		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Unterminated string.", s.line))
+		return
+	}
+
+	// The closing ".
+	s.advance()
+	fmt.Println("PEEEEKK", s.peek())
+
+	// Trim the surrounding quotes.
+
+	str := s.source[s.start:s.current]
+	s.addToken(STRING, Literal{STRING_LITERAL, str})
 }
 
 func (s *Scanner) printTokens(tokens []Token) {
@@ -70,25 +93,25 @@ func (s *Scanner) scanToken() {
 	c := s.advance()
 	switch c {
 	case LEFT_PAREN:
-		s.addToken(LEFT_PAREN)
+		s.addToken(LEFT_PAREN, Literal{})
 	case RIGHT_PAREN:
-		s.addToken(RIGHT_PAREN)
+		s.addToken(RIGHT_PAREN, Literal{})
 	case LEFT_BRACE:
-		s.addToken(LEFT_BRACE)
+		s.addToken(LEFT_BRACE, Literal{})
 	case RIGHT_BRACE:
-		s.addToken(RIGHT_BRACE)
+		s.addToken(RIGHT_BRACE, Literal{})
 	case STAR:
-		s.addToken(STAR)
+		s.addToken(STAR, Literal{})
 	case DOT:
-		s.addToken(DOT)
+		s.addToken(DOT, Literal{})
 	case COMMA:
-		s.addToken(COMMA)
+		s.addToken(COMMA, Literal{})
 	case PLUS:
-		s.addToken(PLUS)
+		s.addToken(PLUS, Literal{})
 	case MINUS:
-		s.addToken(MINUS)
+		s.addToken(MINUS, Literal{})
 	case SEMICOLON:
-		s.addToken(SEMICOLON)
+		s.addToken(SEMICOLON, Literal{})
 	case SLASH:
 		if s.match(SLASH) {
 			for s.peek() != NEWLINE && !s.isAtEnd() {
@@ -96,39 +119,42 @@ func (s *Scanner) scanToken() {
 			}
 			s.line++
 		} else {
-			s.addToken(SLASH)
+			s.addToken(SLASH, Literal{})
 		}
 
 	case EOF:
-		s.addToken(EOF)
+		s.addToken(EOF, Literal{})
 	case EQUAL:
 		if s.match(EQUAL) {
-			s.addToken(EQUAL_EQUAL)
+			s.addToken(EQUAL_EQUAL, Literal{})
 		} else {
-			s.addToken(EQUAL)
+			s.addToken(EQUAL, Literal{})
 		}
 	case BANG:
 		if s.match(EQUAL) {
-			s.addToken(BANG_EQUAL)
+			s.addToken(BANG_EQUAL, Literal{})
 		} else {
-			s.addToken(BANG)
+			s.addToken(BANG, Literal{})
 		}
 	case GREATER:
 		if s.match(EQUAL) {
-			s.addToken(GREATER_EQUAL)
+			s.addToken(GREATER_EQUAL, Literal{})
 		} else {
-			s.addToken(GREATER)
+			s.addToken(GREATER, Literal{})
 		}
 	case LESS:
 		if s.match(EQUAL) {
-			s.addToken(LESS_EQUAL)
+			s.addToken(LESS_EQUAL, Literal{})
 		} else {
-			s.addToken(LESS)
+			s.addToken(LESS, Literal{})
 		}
 	case CARRIAGE_RETURN, WHITESPACE, TABULATOR:
 
 	case NEWLINE:
 		s.line++
+
+	case PARENTHESES:
+		s.createString()
 	default:
 		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Unexpected character: %s", s.line, s.peekString()))
 

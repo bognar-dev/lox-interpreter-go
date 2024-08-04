@@ -59,6 +59,7 @@ const (
 	CARRIAGE_RETURN           = "\r"
 	TABULATOR                 = "\t"
 	WHITESPACE                = " "
+	PARENTHESES               = "\""
 )
 
 func (t TokenType) String() string {
@@ -142,7 +143,7 @@ func (t TokenType) String() string {
 	case EOF:
 		return "EOF"
 	case NEWLINE:
-		return "\\n"
+		return "\n"
 	}
 	return string(t)
 }
@@ -202,10 +203,21 @@ var tokenLoopUp = map[TokenType]string{
 
 	NEWLINE: "\\n"}
 
+type LiteralType int
+
+const (
+	STRING_LITERAL LiteralType = iota
+	NUMBER_LITERAL
+)
+
+type Literal struct {
+	literalType LiteralType
+	value       string
+}
 type Token struct {
 	tokenType TokenType
 	lexeme    string
-	literal   interface{}
+	literal   Literal
 	line      int
 }
 

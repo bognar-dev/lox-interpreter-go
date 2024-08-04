@@ -61,7 +61,7 @@ const (
 	EOF TokenType = ""
 )
 
-func (t TokenType) toString() string {
+func (t TokenType) String() string {
 	switch t {
 	case LEFT_PAREN:
 		return "LEFT_PAREN"
@@ -153,7 +153,7 @@ type Token struct {
 }
 
 func (t Token) toString() string {
-	return t.tokenType.toString() + " " + t.lexeme
+	return t.tokenType.String() + " " + t.lexeme
 }
 
 type Scanner struct {
@@ -175,13 +175,10 @@ func (s *Scanner) scanTokens() ([]Token, []error) {
 }
 
 func (s *Scanner) peek() TokenType {
-	return TokenType(s.source[s.current:s.current])
+	return TokenType(s.source[s.current-1 : s.current])
 }
 
 func (s *Scanner) peekString() string {
-	if s.current == 1 {
-		return s.source[s.start:s.current]
-	}
 	return s.source[s.current-1 : s.current]
 }
 
@@ -202,6 +199,19 @@ func (s *Scanner) printTokens(tokens []Token) {
 	for _, token := range tokens {
 		fmt.Println(token.toString() + " null")
 	}
+}
+
+func (s *Scanner) match(expected TokenType) bool {
+	if s.isAtEnd() {
+		return false
+	}
+	peekVal := s.peek()
+	if peekVal != expected {
+		return false
+	}
+
+	s.current++
+	return true
 }
 
 func (s *Scanner) scanToken() {
@@ -231,6 +241,11 @@ func (s *Scanner) scanToken() {
 		s.addToken(SLASH)
 	case EOF:
 		s.addToken(EOF)
+	case EQUAL:
+		if s.match(EQUAL) {
+			s.addToken(EQUAL)
+		}
+		s.addToken(EQUAL_EQUAL)
 	default:
 		s.errorList = append(s.errorList, fmt.Errorf("[line %s] Error: Unexpected character: %s", strconv.Itoa(s.line), s.peekString()))
 

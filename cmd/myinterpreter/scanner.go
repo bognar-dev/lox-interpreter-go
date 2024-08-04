@@ -35,7 +35,7 @@ const (
 	LESS_EQUAL TokenType = "<="
 
 	// Literals.
-	IDENTIFIER TokenType = "."
+	IDENTIFIER TokenType = "identifier"
 	STRING     TokenType = "string"
 	NUMBER     TokenType = "number"
 
@@ -62,7 +62,87 @@ const (
 )
 
 func (t TokenType) toString() string {
-	return string(t)[1:]
+	switch t {
+	case LEFT_PAREN:
+		return "("
+	case RIGHT_PAREN:
+		return ")"
+	case LEFT_BRACE:
+		return "{"
+	case RIGHT_BRACE:
+		return "}"
+	case STAR:
+		return "*"
+	case DOT:
+		return "."
+	case COMMA:
+		return ","
+	case PLUS:
+		return "+"
+	case MINUS:
+		return "-"
+	case SEMICOLON:
+		return ";"
+	case SLASH:
+		return "/"
+	case BANG:
+		return "!"
+	case BANG_EQUAL:
+		return "!="
+	case EQUAL:
+		return "="
+	case EQUAL_EQUAL:
+		return "=="
+	case GREATER:
+		return ">"
+	case GREATER_EQUAL:
+		return ">="
+	case LESS:
+		return "<"
+	case LESS_EQUAL:
+		return "<="
+	case IDENTIFIER:
+		return "IDENTIFIER"
+	case STRING:
+		return "STRING"
+	case NUMBER:
+		return "NUMBER"
+	case AND:
+		return "AND"
+	case CLASS:
+		return "CLASS"
+	case ELSE:
+		return "ELSE"
+	case FALSE:
+		return "FALSE"
+	case FUN:
+		return "FUN"
+	case FOR:
+		return "FOR"
+	case IF:
+		return "IF"
+	case NIL:
+		return "NIL"
+	case OR:
+		return "OR"
+	case PRINT:
+		return "PRINT"
+	case RETURN:
+		return "RETURN"
+	case SUPER:
+		return "SUPER"
+	case THIS:
+		return "THIS"
+	case TRUE:
+		return "TRUE"
+	case VAR:
+		return "VAR"
+	case WHILE:
+		return "WHILE"
+	case EOF:
+		return "EOF"
+	}
+	return "UNKNOWN"
 }
 
 type Token struct {

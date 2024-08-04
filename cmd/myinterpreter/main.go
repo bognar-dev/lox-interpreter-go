@@ -32,7 +32,7 @@ func main() {
 	tokens, err := scanner.scanTokens()
 
 	if err != nil {
-		fmt.Println(err)
+		os.Stderr.WriteString(err.Error() + "\n")
 		os.Exit(65)
 	}
 	scanner.printTokens(tokens)

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 )
 
 type Scanner struct {
@@ -95,6 +94,7 @@ func (s *Scanner) scanToken() {
 			for s.peek() != NEWLINE && !s.isAtEnd() {
 				s.advance()
 			}
+			s.line++
 		} else {
 			s.addToken(SLASH)
 		}
@@ -129,11 +129,8 @@ func (s *Scanner) scanToken() {
 
 	case NEWLINE:
 		s.line++
-		if s.line == 6 {
-			s.line++
-		}
 	default:
-		s.errorList = append(s.errorList, fmt.Errorf("[line %s] Error: Unexpected character: %s", strconv.Itoa(s.line), s.peekString()))
+		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Unexpected character: %s", s.line, s.peekString()))
 
 	}
 }

@@ -162,7 +162,6 @@ type Scanner struct {
 	start    int
 	current  int
 	line     int
-	hasError bool
 	errorMsg error
 }
 
@@ -223,7 +222,6 @@ func (s *Scanner) scanToken() {
 	case SLASH:
 		s.addToken(SLASH)
 	default:
-		s.errorMsg = fmt.Errorf("? [line 1] Error: Unexpected character: " + s.peek().toString())
-		s.hasError = true
+		s.errorMsg = fmt.Errorf("[line 1] Error: Unexpected character: " + s.peek().toString())
 	}
 }

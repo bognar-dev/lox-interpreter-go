@@ -28,7 +28,7 @@ func main() {
 		os.Exit(1)
 	}
 	source := string(rawfileContents)
-	scanner := Scanner{source: source, tokens: []Token{}, start: 0, current: 0, line: 1, hasError: false}
+	scanner := Scanner{source: source, tokens: []Token{}, start: 0, current: 0, line: 1}
 	tokens, err := scanner.scanTokens()
 
 	if err != nil {

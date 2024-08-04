@@ -187,6 +187,9 @@ func (s *Scanner) isAtEnd() bool {
 }
 func (s *Scanner) advance() TokenType {
 	s.current++
+	if s.current > 1 {
+		fmt.Println(strconv.Itoa(int(s.source[s.current-1])))
+	}
 	return TokenType(strconv.Itoa(int(s.source[s.current-1])))
 }
 

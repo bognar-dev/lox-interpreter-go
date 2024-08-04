@@ -44,9 +44,6 @@ func (s *Scanner) peekAt(pos int) TokenType {
 }
 func (s *Scanner) advance() TokenType {
 	s.current++
-	if s.current >= len(s.source) {
-		s.line++
-	}
 
 	return TokenType(s.source[s.current-1])
 }
@@ -133,6 +130,9 @@ func (s *Scanner) scanToken() {
 	case NEWLINE:
 		s.line++
 	default:
+		if s.current >= len(s.source) {
+			s.line++
+		}
 		s.errorList = append(s.errorList, fmt.Errorf("[line %s] Error: Unexpected character: %s", strconv.Itoa(s.line), s.peekString()))
 
 	}

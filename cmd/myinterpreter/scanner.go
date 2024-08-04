@@ -221,6 +221,8 @@ func (s *Scanner) scanToken() {
 		s.addToken(SEMICOLON)
 	case SLASH:
 		s.addToken(SLASH)
+	case EOF:
+		s.addToken(EOF)
 	default:
 		if s.errorMsg == nil {
 			s.errorMsg = fmt.Errorf("[line " + strconv.Itoa(s.line) + "] Error: Unexpected character: " + s.peek().toString())

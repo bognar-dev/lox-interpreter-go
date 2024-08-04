@@ -30,7 +30,7 @@ func main() {
 	source := string(rawfileContents)
 	scanner := Scanner{source: source, tokens: []Token{}, start: 0, current: 0, line: 1}
 	tokens, err := scanner.scanTokens()
-	fmt.Println("Tokens: ", tokens)
+	fmt.Println("Tokens: ", tokens[0].toString())
 	if err != nil {
 		os.Stderr.WriteString(err.Error() + "\n")
 		os.Exit(65)

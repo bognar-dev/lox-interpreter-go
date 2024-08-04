@@ -125,7 +125,10 @@ func (s *Scanner) scanToken() {
 		} else {
 			s.addToken(LESS)
 		}
+	case CARRIAGE_RETURN, WHITESPACE, TABULATOR:
 
+	case NEWLINE:
+		s.line++
 	default:
 		s.errorList = append(s.errorList, fmt.Errorf("[line %s] Error: Unexpected character: %s", strconv.Itoa(s.line), s.peekString()))
 

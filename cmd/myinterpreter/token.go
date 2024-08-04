@@ -55,7 +55,10 @@ const (
 
 	EOF TokenType = ""
 
-	NEWLINE TokenType = "\n"
+	NEWLINE         TokenType = "\n"
+	CARRIAGE_RETURN           = "\r"
+	TABULATOR                 = "\t"
+	WHITESPACE                = " "
 )
 
 func (t TokenType) String() string {

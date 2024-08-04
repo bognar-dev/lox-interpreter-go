@@ -142,7 +142,7 @@ func (t TokenType) toString() string {
 	case EOF:
 		return "EOF"
 	}
-	return "UNKNOWN"
+	return string(t)
 }
 
 type Token struct {

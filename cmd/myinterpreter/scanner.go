@@ -224,7 +224,6 @@ func (s *Scanner) scanToken() {
 	case EOF:
 		s.addToken(EOF)
 	default:
-		fmt.Println("No Matching Token ", s.peek().toString())
 		if s.errorMsg == nil {
 			s.errorMsg = fmt.Errorf("[line " + strconv.Itoa(s.line) + "] Error: Unexpected character: " + s.peek().toString())
 		} else {

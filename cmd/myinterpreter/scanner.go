@@ -193,29 +193,29 @@ func (s *Scanner) scanToken() {
 	c := s.advance()
 	switch c {
 	case LEFT_PAREN:
-		fmt.Println("LEFT_PAREN ( null")
+		s.addToken(LEFT_PAREN)
 	case RIGHT_PAREN:
-		fmt.Println("RIGHT_PAREN ) null")
+		s.addToken(RIGHT_PAREN)
 	case LEFT_BRACE:
-		fmt.Println("LEFT_BRACE { null")
+		s.addToken(LEFT_BRACE)
 	case RIGHT_BRACE:
-		fmt.Println("RIGHT_BRACE } null")
+		s.addToken(RIGHT_BRACE)
 	case STAR:
-		fmt.Println("STAR * null")
+		s.addToken(STAR)
 	case DOT:
-		fmt.Println("DOT . null")
+		s.addToken(DOT)
 	case COMMA:
-		fmt.Println("COMMA , null")
+		s.addToken(COMMA)
 	case PLUS:
-		fmt.Println("PLUS + null")
+		s.addToken(PLUS)
 	case MINUS:
-		fmt.Println("MINUS - null")
+		s.addToken(MINUS)
 	case SEMICOLON:
-		fmt.Println("SEMICOLON ; null")
+		s.addToken(SEMICOLON)
 	case SLASH:
-		fmt.Println("SLASH / null")
+		s.addToken(SLASH)
 	default:
-		fmt.Println("[line 1] Error: Unexpected character: " + s.peek())
+		fmt.Println("[line 1] Error: Unexpected character: " + s.peek().toString())
 		hasError = true
 	}
 }

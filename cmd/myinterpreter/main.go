@@ -35,7 +35,6 @@ func main() {
 	tokens := scanner.scanTokens()
 	print(tokens)
 	if scanner.hasError {
-		print("Error")
 		os.Exit(65)
 	}
 }

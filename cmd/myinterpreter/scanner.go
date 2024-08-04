@@ -197,7 +197,7 @@ func (s *Scanner) advance() TokenType {
 
 func (s *Scanner) printTokens(tokens []Token) {
 	for _, token := range tokens {
-		fmt.Println(token.toString())
+		fmt.Print(token.toString())
 	}
 }
 

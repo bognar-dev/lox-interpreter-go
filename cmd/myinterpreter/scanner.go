@@ -58,7 +58,7 @@ const (
 	VAR    TokenType = "var"
 	WHILE  TokenType = "while"
 
-	EOF TokenType = "null"
+	EOF TokenType = ""
 )
 
 func (t TokenType) toString() string {
@@ -170,7 +170,7 @@ func (s *Scanner) scanTokens() ([]Token, []error) {
 		s.start = s.current
 		s.scanToken()
 	}
-	s.tokens = append(s.tokens, Token{EOF, "null", nil, s.line})
+	s.tokens = append(s.tokens, Token{EOF, "", nil, s.line})
 	return s.tokens, s.errorList
 }
 
@@ -197,7 +197,7 @@ func (s *Scanner) advance() TokenType {
 
 func (s *Scanner) printTokens(tokens []Token) {
 	for _, token := range tokens {
-		fmt.Print(token.toString())
+		fmt.Println(token.toString() + " null")
 	}
 }
 

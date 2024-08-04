@@ -100,6 +100,24 @@ func (s *Scanner) scanToken() {
 		} else {
 			s.addToken(EQUAL)
 		}
+	case BANG:
+		if s.match(EQUAL) {
+			s.addToken(BANG_EQUAL)
+		} else {
+			s.addToken(BANG)
+		}
+	case GREATER:
+		if s.match(EQUAL) {
+			s.addToken(GREATER_EQUAL)
+		} else {
+			s.addToken(GREATER)
+		}
+	case LESS:
+		if s.match(EQUAL) {
+			s.addToken(LESS_EQUAL)
+		} else {
+			s.addToken(LESS)
+		}
 
 	default:
 		s.errorList = append(s.errorList, fmt.Errorf("[line %s] Error: Unexpected character: %s", strconv.Itoa(s.line), s.peekString()))

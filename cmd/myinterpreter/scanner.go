@@ -62,7 +62,7 @@ const (
 )
 
 func (t TokenType) toString() string {
-	return string(t)
+	return string(t)[1:]
 }
 
 type Token struct {

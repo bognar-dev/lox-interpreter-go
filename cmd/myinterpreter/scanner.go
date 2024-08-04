@@ -170,7 +170,7 @@ func (s *Scanner) scanTokens() ([]Token, error) {
 		s.start = s.current
 		s.scanToken()
 	}
-	s.tokens = append(s.tokens, Token{EOF, "", nil, s.line})
+	s.tokens = append(s.tokens, Token{EOF, "null", nil, s.line})
 	return s.tokens, s.errorMsg
 }
 

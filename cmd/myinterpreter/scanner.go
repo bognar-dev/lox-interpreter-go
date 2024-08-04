@@ -178,8 +178,12 @@ func (s *Scanner) peek() TokenType {
 	return TokenType(s.source[s.current-1 : s.current])
 }
 
+func (s *Scanner) peekString() string {
+	return s.source[s.current-1 : s.current]
+}
+
 func (s *Scanner) addToken(token TokenType) {
-	s.tokens = append(s.tokens, Token{token, s.peek().toString(), nil, s.line})
+	s.tokens = append(s.tokens, Token{token, s.peekString(), nil, s.line})
 }
 
 func (s *Scanner) isAtEnd() bool {

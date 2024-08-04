@@ -5,9 +5,6 @@ import (
 	"os"
 )
 
-var hasError = false
-var hasRuntimeError = false
-
 func main() {
 	// You can use print statements as follows for debugging, they"l be visible when running tests.
 	//fmt.Fprintln(os.Stderr, "Logs from your program will appear here!")
@@ -31,7 +28,7 @@ func main() {
 		os.Exit(1)
 	}
 	source := string(rawfileContents)
-	scanner := Scanner{source: source, tokens: []Token{}, start: 0, current: 0, line: 1, hasError: hasError}
+	scanner := Scanner{source: source, tokens: []Token{}, start: 0, current: 0, line: 1, hasError: false}
 	tokens := scanner.scanTokens()
 	scanner.printTokens(tokens)
 	fmt.Println(scanner.hasError)

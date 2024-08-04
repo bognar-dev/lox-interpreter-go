@@ -29,11 +29,15 @@ func main() {
 	}
 	source := string(rawfileContents)
 	scanner := Scanner{source: source, tokens: []Token{}, start: 0, current: 0, line: 1}
-	tokens, err := scanner.scanTokens()
-	if err != nil {
-		os.Stderr.WriteString(err.Error() + "\n")
-		scanner.printTokens(tokens)
+	var errorList []error
+	var tokens []Token
+	tokens, errorList = scanner.scanTokens()
+	scanner.printTokens(tokens)
+	if len(errorList) != 0 {
+		for _, err := range errorList {
+			fmt.Fprintln(os.Stderr, err)
+		}
 		os.Exit(65)
 	}
-	scanner.printTokens(tokens)
+
 }

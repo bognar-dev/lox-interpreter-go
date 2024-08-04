@@ -157,21 +157,21 @@ func (t Token) toString() string {
 }
 
 type Scanner struct {
-	source   string
-	tokens   []Token
-	start    int
-	current  int
-	line     int
-	errorMsg error
+	source    string
+	tokens    []Token
+	start     int
+	current   int
+	line      int
+	errorList []error
 }
 
-func (s *Scanner) scanTokens() ([]Token, error) {
+func (s *Scanner) scanTokens() ([]Token, []error) {
 	for !s.isAtEnd() {
 		s.start = s.current
 		s.scanToken()
 	}
 	s.tokens = append(s.tokens, Token{EOF, "null", nil, s.line})
-	return s.tokens, s.errorMsg
+	return s.tokens, s.errorList
 }
 
 func (s *Scanner) peek() TokenType {
@@ -225,11 +225,7 @@ func (s *Scanner) scanToken() {
 	case EOF:
 		s.addToken(EOF)
 	default:
-		if s.errorMsg == nil {
-			s.errorMsg = fmt.Errorf("[line " + strconv.Itoa(s.line) + "] Error: Unexpected character: " + s.peek().toString())
-		} else {
-			s.errorMsg = fmt.Errorf("%w \n%s", s.errorMsg, "[line "+strconv.Itoa(s.line)+"] Error: Unexpected character: "+s.peek().toString())
-		}
+		s.errorList = append(s.errorList, fmt.Errorf("[line "+strconv.Itoa(s.line)+"] Error: Unexpected character: "+s.peek().toString()))
 
 	}
 }

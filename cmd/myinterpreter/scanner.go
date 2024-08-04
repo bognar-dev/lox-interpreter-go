@@ -44,6 +44,9 @@ func (s *Scanner) peekAt(pos int) TokenType {
 }
 func (s *Scanner) advance() TokenType {
 	s.current++
+	if s.current >= len(s.source) {
+		s.line++
+	}
 
 	return TokenType(s.source[s.current-1])
 }

@@ -216,6 +216,7 @@ func (s *Scanner) scanToken() {
 	case DOT:
 		s.addToken(DOT)
 	case COMMA:
+		fmt.Println("COMMA found")
 		s.addToken(COMMA)
 	case PLUS:
 		s.addToken(PLUS)
@@ -227,6 +228,12 @@ func (s *Scanner) scanToken() {
 		s.addToken(SLASH)
 	case EOF:
 		s.addToken(EOF)
-	
+	default:
+		if s.errorMsg == nil {
+			s.errorMsg = fmt.Errorf("[line " + strconv.Itoa(s.line) + "] Error: Unexpected character: " + s.peek().toString())
+		} else {
+			s.errorMsg = fmt.Errorf("%w \n %s", s.errorMsg, "[line "+strconv.Itoa(s.line)+"] Error: Unexpected character: "+s.peek().toString())
+		}
+
 	}
 }

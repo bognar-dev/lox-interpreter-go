@@ -153,7 +153,7 @@ type Token struct {
 }
 
 func (t Token) toString() string {
-	return t.tokenType.toString() + " " + t.lexeme + " " + fmt.Sprint(t.literal)
+	return t.tokenType.toString() + " " + t.lexeme
 }
 
 type Scanner struct {

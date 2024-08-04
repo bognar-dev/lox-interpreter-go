@@ -228,7 +228,7 @@ func (s *Scanner) scanToken() {
 		if s.errorMsg == nil {
 			s.errorMsg = fmt.Errorf("[line " + strconv.Itoa(s.line) + "] Error: Unexpected character: " + s.peek().toString())
 		} else {
-			s.errorMsg = fmt.Errorf("%w \n %s", s.errorMsg, "[line "+strconv.Itoa(s.line)+"] Error: Unexpected character: "+s.peek().toString())
+			s.errorMsg = fmt.Errorf("%w \n%s", s.errorMsg, "[line "+strconv.Itoa(s.line)+"] Error: Unexpected character: "+s.peek().toString())
 		}
 
 	}

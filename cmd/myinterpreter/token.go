@@ -54,6 +54,8 @@ const (
 	WHILE  TokenType = "while"
 
 	EOF TokenType = ""
+
+	NEWLINE TokenType = "\n"
 )
 
 func (t TokenType) String() string {
@@ -136,6 +138,8 @@ func (t TokenType) String() string {
 		return "WHILE"
 	case EOF:
 		return "EOF"
+	case NEWLINE:
+		return "\\n"
 	}
 	return string(t)
 }
@@ -191,7 +195,9 @@ var tokenLoopUp = map[TokenType]string{
 	VAR:    "var",
 	WHILE:  "while",
 
-	EOF: "null"}
+	EOF: "null",
+
+	NEWLINE: "\\n"}
 
 type Token struct {
 	tokenType TokenType

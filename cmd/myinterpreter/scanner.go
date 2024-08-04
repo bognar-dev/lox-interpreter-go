@@ -91,7 +91,14 @@ func (s *Scanner) scanToken() {
 	case SEMICOLON:
 		s.addToken(SEMICOLON)
 	case SLASH:
-		s.addToken(SLASH)
+		if s.match(SLASH) {
+			for s.peek() != NEWLINE && !s.isAtEnd() {
+				s.advance()
+			}
+		} else {
+			s.addToken(SLASH)
+		}
+
 	case EOF:
 		s.addToken(EOF)
 	case EQUAL:

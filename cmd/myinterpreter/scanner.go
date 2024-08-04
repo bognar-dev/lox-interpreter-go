@@ -5,157 +5,6 @@ import (
 	"strconv"
 )
 
-type TokenType string
-
-const (
-	LEFT_PAREN  TokenType = "("
-	RIGHT_PAREN TokenType = ")"
-	LEFT_BRACE  TokenType = "{"
-	RIGHT_BRACE TokenType = "}"
-
-	COMMA     TokenType = ","
-	DOT       TokenType = "."
-	MINUS     TokenType = "-"
-	PLUS      TokenType = "+"
-	SEMICOLON TokenType = ";"
-	SLASH     TokenType = "/"
-	STAR      TokenType = "*"
-
-	// One or two character tokens.
-	BANG       TokenType = "!"
-	BANG_EQUAL TokenType = "!="
-
-	EQUAL       TokenType = "="
-	EQUAL_EQUAL TokenType = "=="
-
-	GREATER       TokenType = ">"
-	GREATER_EQUAL TokenType = ">="
-
-	LESS       TokenType = "<"
-	LESS_EQUAL TokenType = "<="
-
-	// Literals.
-	IDENTIFIER TokenType = "identifier"
-	STRING     TokenType = "string"
-	NUMBER     TokenType = "number"
-
-	// Keywords.
-	AND   TokenType = "and"
-	CLASS TokenType = "class"
-	ELSE  TokenType = "else"
-	FALSE TokenType = "false"
-	FUN   TokenType = "fun"
-	FOR   TokenType = "for"
-	IF    TokenType = "if"
-	NIL   TokenType = "nil"
-	OR    TokenType = "or"
-
-	PRINT  TokenType = "print"
-	RETURN TokenType = "return"
-	SUPER  TokenType = "super"
-	THIS   TokenType = "this"
-	TRUE   TokenType = "true"
-	VAR    TokenType = "var"
-	WHILE  TokenType = "while"
-
-	EOF TokenType = ""
-)
-
-func (t TokenType) String() string {
-	switch t {
-	case LEFT_PAREN:
-		return "LEFT_PAREN"
-	case RIGHT_PAREN:
-		return "RIGHT_PAREN"
-	case LEFT_BRACE:
-		return "LEFT_BRACE"
-	case RIGHT_BRACE:
-		return "RIGHT_BRACE"
-	case STAR:
-		return "STAR"
-	case DOT:
-		return "DOT"
-	case COMMA:
-		return "COMMA"
-	case PLUS:
-		return "PLUS"
-	case MINUS:
-		return "MINUS"
-	case SEMICOLON:
-		return "SEMICOLON"
-	case SLASH:
-		return "SLASH"
-	case BANG:
-		return "BANG"
-	case BANG_EQUAL:
-		return "BANG_EQUAL"
-	case EQUAL:
-		return "EQUAL"
-	case EQUAL_EQUAL:
-		return "EQUAL_EQUAL"
-	case GREATER:
-		return "GREATER"
-	case GREATER_EQUAL:
-		return "GREATER_EQUAL"
-	case LESS:
-		return "LESS"
-	case LESS_EQUAL:
-		return "<="
-	case IDENTIFIER:
-		return "IDENTIFIER"
-	case STRING:
-		return "STRING"
-	case NUMBER:
-		return "NUMBER"
-	case AND:
-		return "AND"
-	case CLASS:
-		return "CLASS"
-	case ELSE:
-		return "ELSE"
-	case FALSE:
-		return "FALSE"
-	case FUN:
-		return "FUN"
-	case FOR:
-		return "FOR"
-	case IF:
-		return "IF"
-	case NIL:
-		return "NIL"
-	case OR:
-		return "OR"
-	case PRINT:
-		return "PRINT"
-	case RETURN:
-		return "RETURN"
-	case SUPER:
-		return "SUPER"
-	case THIS:
-		return "THIS"
-	case TRUE:
-		return "TRUE"
-	case VAR:
-		return "VAR"
-	case WHILE:
-		return "WHILE"
-	case EOF:
-		return "EOF"
-	}
-	return string(t)
-}
-
-type Token struct {
-	tokenType TokenType
-	lexeme    string
-	literal   interface{}
-	line      int
-}
-
-func (t Token) toString() string {
-	return t.tokenType.String() + " " + t.lexeme
-}
-
 type Scanner struct {
 	source    string
 	tokens    []Token
@@ -183,11 +32,15 @@ func (s *Scanner) peekString() string {
 }
 
 func (s *Scanner) addToken(token TokenType) {
-	s.tokens = append(s.tokens, Token{token, s.peekString(), nil, s.line})
+	s.tokens = append(s.tokens, Token{token, tokenLoopUp[token], nil, s.line})
 }
 
 func (s *Scanner) isAtEnd() bool {
 	return s.current >= len(s.source)
+}
+
+func (s *Scanner) peekAt(pos int) TokenType {
+	return TokenType(s.source[pos])
 }
 func (s *Scanner) advance() TokenType {
 	s.current++
@@ -197,7 +50,7 @@ func (s *Scanner) advance() TokenType {
 
 func (s *Scanner) printTokens(tokens []Token) {
 	for _, token := range tokens {
-		fmt.Println(token.toString() + " null")
+		fmt.Println(token.String() + " null")
 	}
 }
 
@@ -205,7 +58,7 @@ func (s *Scanner) match(expected TokenType) bool {
 	if s.isAtEnd() {
 		return false
 	}
-	peekVal := s.peek()
+	peekVal := s.peekAt(s.current)
 	if peekVal != expected {
 		return false
 	}
@@ -243,9 +96,11 @@ func (s *Scanner) scanToken() {
 		s.addToken(EOF)
 	case EQUAL:
 		if s.match(EQUAL) {
+			s.addToken(EQUAL_EQUAL)
+		} else {
 			s.addToken(EQUAL)
 		}
-		s.addToken(EQUAL_EQUAL)
+
 	default:
 		s.errorList = append(s.errorList, fmt.Errorf("[line %s] Error: Unexpected character: %s", strconv.Itoa(s.line), s.peekString()))
 

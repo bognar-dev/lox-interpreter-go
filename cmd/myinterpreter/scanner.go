@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"strconv"
+)
+
 type TokenType string
 
 const (
@@ -45,19 +50,19 @@ const (
 	NIL   TokenType = "nil"
 	OR    TokenType = "or"
 
-	PRINT  TokenType = " "
-	RETURN TokenType = " "
-	SUPER  TokenType = " "
-	THIS   TokenType = " "
-	TRUE   TokenType = " "
-	VAR    TokenType = " "
-	WHILE  TokenType = " "
+	PRINT  TokenType = "print"
+	RETURN TokenType = "return"
+	SUPER  TokenType = "super"
+	THIS   TokenType = "this"
+	TRUE   TokenType = "true"
+	VAR    TokenType = "var"
+	WHILE  TokenType = "while"
 
-	EOF TokenType = " "
+	EOF TokenType = "null"
 )
 
 func (t TokenType) toString() string {
-
+	return string(t)
 }
 
 type Token struct {
@@ -68,15 +73,16 @@ type Token struct {
 }
 
 func (t Token) toString() string {
-	return t.tokenType + " " + t.lexeme + " " + t.literal
+	return t.tokenType.toString() + " " + t.lexeme + " " + fmt.Sprint(t.literal)
 }
 
 type Scanner struct {
-	source  string
-	tokens  []Token
-	start   int
-	current int
-	line    int
+	source   string
+	tokens   []Token
+	start    int
+	current  int
+	line     int
+	hasError bool
 }
 
 func (s *Scanner) scanTokens() []Token {
@@ -86,4 +92,50 @@ func (s *Scanner) scanTokens() []Token {
 	}
 	s.tokens = append(s.tokens, Token{EOF, "", nil, s.line})
 	return s.tokens
+}
+
+func (s *Scanner) peek() TokenType {
+	return TokenType(strconv.Itoa(int(s.source[s.current])))
+}
+
+func (s *Scanner) addToken(token TokenType) {
+	s.tokens = append(s.tokens, Token{token, "", nil, s.line})
+}
+
+func (s *Scanner) isAtEnd() bool {
+	return s.current >= len(s.source)
+}
+func (s *Scanner) advance() TokenType {
+	s.current++
+	return TokenType(strconv.Itoa(int(s.source[s.current-1])))
+}
+func (s *Scanner) scanToken() {
+	c := s.advance()
+	switch c {
+	case LEFT_PAREN:
+		fmt.Println("LEFT_PAREN ( null")
+	case RIGHT_PAREN:
+		fmt.Println("RIGHT_PAREN ) null")
+	case LEFT_BRACE:
+		fmt.Println("LEFT_BRACE { null")
+	case RIGHT_BRACE:
+		fmt.Println("RIGHT_BRACE } null")
+	case STAR:
+		fmt.Println("STAR * null")
+	case DOT:
+		fmt.Println("DOT . null")
+	case COMMA:
+		fmt.Println("COMMA , null")
+	case PLUS:
+		fmt.Println("PLUS + null")
+	case MINUS:
+		fmt.Println("MINUS - null")
+	case SEMICOLON:
+		fmt.Println("SEMICOLON ; null")
+	case SLASH:
+		fmt.Println("SLASH / null")
+	default:
+		fmt.Println("[line 1] Error: Unexpected character: " + string(c))
+		hasError = true
+	}
 }

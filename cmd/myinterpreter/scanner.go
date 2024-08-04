@@ -130,7 +130,7 @@ func (s *Scanner) scanToken() {
 	case NEWLINE:
 		s.line++
 	default:
-		if s.current >= len(s.source) {
+		if s.isAtEnd() {
 			s.line++
 		}
 		s.errorList = append(s.errorList, fmt.Errorf("[line %s] Error: Unexpected character: %s", strconv.Itoa(s.line), s.peekString()))

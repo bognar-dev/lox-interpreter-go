@@ -66,12 +66,19 @@ func (s *Scanner) createString() {
 	s.addToken(STRING, Literal{STRING_LITERAL, str})
 }
 func (s *Scanner) createNumber() {
-	for s.isDigit(s.peek()) {
+	for s.isDigit(s.peek()) && !s.isAtEnd() {
 		s.advance()
 	}
-	if s.peek() == DOT && s.isDigit(s.peekNext()) {
+	var next TokenType
+	next = s.peekNext()
+
+	curr := s.peek()
+
+	if curr == DOT && s.isDigit(next) {
+		// Consume the "."
 		s.advance()
-		for s.isDigit(s.peek()) {
+
+		for s.isDigit(s.peek()) && !s.isAtEnd() {
 			s.advance()
 		}
 	}

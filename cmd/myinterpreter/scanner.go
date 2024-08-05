@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"strconv"
-	"strings"
 )
 
 type Scanner struct {
@@ -75,7 +74,7 @@ func (s *Scanner) createNumber() {
 			s.advance()
 		}
 	}
-	str := strings.Trim(s.source[s.start:s.current-1], "\r")
+	str := s.source[s.start : s.current-1]
 	floatVal, err := strconv.ParseFloat(str, 64)
 	if err != nil {
 	}

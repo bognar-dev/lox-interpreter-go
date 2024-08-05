@@ -57,7 +57,6 @@ func (s *Scanner) createString() {
 		s.advance()
 	}
 	str := s.source[s.start:s.current]
-	fmt.Println("String: ", str)
 	if s.isAtEnd() && str[len(str)-1] != '"' {
 		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Unterminated string.", s.line))
 		return
@@ -67,7 +66,7 @@ func (s *Scanner) createString() {
 
 func (s *Scanner) printTokens(tokens []Token) {
 	for _, token := range tokens {
-		fmt.Println(token.String() + " null")
+		fmt.Println(token.String())
 	}
 }
 

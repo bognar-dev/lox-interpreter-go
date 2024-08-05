@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 type TokenType string
 
 const (
@@ -206,7 +208,8 @@ var tokenLoopUp = map[TokenType]string{
 type LiteralType int
 
 const (
-	STRING_LITERAL LiteralType = iota
+	NONE LiteralType = iota
+	STRING_LITERAL
 	NUMBER_LITERAL
 )
 
@@ -223,10 +226,10 @@ type Token struct {
 
 func (t Token) String() string {
 	if t.literal.literalType == STRING_LITERAL {
-		return t.tokenType.String() + " " + t.literal.value
+		return t.tokenType.String() + " " + t.literal.value + " " + strings.Trim(t.literal.value, "\"")
 	}
 	if t.literal.literalType == NUMBER_LITERAL {
-		return t.tokenType.String() + " " + t.literal.value
+		return t.tokenType.String() + " " + t.literal.value + " numberliteral"
 	}
-	return t.tokenType.String() + " " + t.lexeme
+	return t.tokenType.String() + " " + t.lexeme + " null"
 }

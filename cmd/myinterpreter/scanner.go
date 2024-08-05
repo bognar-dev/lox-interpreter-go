@@ -70,7 +70,12 @@ func (s *Scanner) createNumber() {
 		s.advance()
 	}
 	var next TokenType
-	next = s.peekNext()
+	// Look for a fractional part.
+	if s.current >= len(s.source) {
+		next = s.peek()
+	} else {
+		next = s.peekNext()
+	}
 
 	curr := s.peek()
 

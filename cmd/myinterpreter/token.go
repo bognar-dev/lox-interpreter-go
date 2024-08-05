@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -234,7 +233,7 @@ func (l Literal) String() string {
 		if l.value == float64(int(l.value.(float64))) {
 			return fmt.Sprintf("%.1f", l.value) // Ensures 1234.0 for whole numbers
 		} else {
-			return fmt.Sprintf(strconv.FormatFloat(l.value.(float64), 'g', -1, 64)) // Keeps the precision for non-whole numbers
+			return fmt.Sprintf("%g", l.value) // Keeps the precision for non-whole numbers
 		}
 	default:
 		return fmt.Sprintf("%v", l.value)

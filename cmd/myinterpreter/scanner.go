@@ -90,7 +90,6 @@ func (s *Scanner) createNumber() {
 	str := strings.Trim(s.source[s.start:s.current], "\r")
 	floatVal, err := strconv.ParseFloat(str, 64)
 	if err != nil {
-		return
 	}
 	s.addToken(NUMBER, Literal{NUMBER_LITERAL, floatVal})
 }

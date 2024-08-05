@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 type Scanner struct {
@@ -86,7 +87,7 @@ func (s *Scanner) createNumber() {
 			s.advance()
 		}
 	}
-	str := s.source[s.start : s.current-1]
+	str := strings.Trim(s.source[s.start:s.current], "\r")
 	floatVal, err := strconv.ParseFloat(str, 64)
 	if err != nil {
 		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Invalid number: %s", s.line, str))

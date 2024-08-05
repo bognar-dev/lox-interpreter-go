@@ -66,28 +66,16 @@ func (s *Scanner) createString() {
 	s.addToken(STRING, Literal{STRING_LITERAL, str})
 }
 func (s *Scanner) createNumber() {
-	for s.isDigit(s.peek()) && !s.isAtEnd() {
+	for s.isDigit(s.peek()) {
 		s.advance()
 	}
-	var next TokenType
-	// Look for a fractional part.
-	if s.current >= len(s.source) {
-		next = s.peek()
-	} else {
-		next = s.peekNext()
-	}
-
-	curr := s.peek()
-
-	if curr == DOT && s.isDigit(next) {
-		// Consume the "."
+	if s.peek() == DOT && s.isDigit(s.peekNext()) {
 		s.advance()
-
-		for s.isDigit(s.peek()) && !s.isAtEnd() {
+		for s.isDigit(s.peek()) {
 			s.advance()
 		}
 	}
-	str := strings.Trim(s.source[s.start:s.current], "\r")
+	str := strings.Trim(s.source[s.start:s.current-1], "\r")
 	floatVal, err := strconv.ParseFloat(str, 64)
 	if err != nil {
 	}

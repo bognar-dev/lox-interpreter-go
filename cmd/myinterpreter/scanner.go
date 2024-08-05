@@ -63,11 +63,40 @@ func (s *Scanner) createString() {
 	}
 	s.addToken(STRING, Literal{STRING_LITERAL, str})
 }
+func (s *Scanner) createNumber() {
+	for s.isDigit(s.peek()) && !s.isAtEnd() {
+		s.advance()
+	}
+	var next TokenType
+	// Look for a fractional part.
+	if s.current >= len(s.source) {
+		next = s.peek()
+	} else {
+		next = s.peekNext()
+	}
+
+	curr := s.peek()
+
+	if curr == DOT && s.isDigit(next) {
+		// Consume the "."
+		s.advance()
+
+		for s.isDigit(s.peek()) && !s.isAtEnd() {
+			s.advance()
+		}
+	}
+	str := s.source[s.start : s.current-1]
+	s.addToken(NUMBER, Literal{NUMBER_LITERAL, str})
+}
 
 func (s *Scanner) printTokens(tokens []Token) {
 	for _, token := range tokens {
 		fmt.Println(token.String())
 	}
+}
+
+func (s *Scanner) isDigit(c TokenType) bool {
+	return c >= "0" && c <= "9"
 }
 
 func (s *Scanner) match(expected TokenType) bool {
@@ -81,6 +110,10 @@ func (s *Scanner) match(expected TokenType) bool {
 
 	s.current++
 	return true
+}
+
+func (s *Scanner) peekNext() TokenType {
+	return TokenType(s.source[s.current])
 }
 
 func (s *Scanner) scanToken() {
@@ -150,6 +183,10 @@ func (s *Scanner) scanToken() {
 	case PARENTHESES:
 		s.createString()
 	default:
+		if s.isDigit(c) {
+			s.createNumber()
+			return
+		}
 		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Unexpected character: %s", s.line, s.peekString()))
 
 	}

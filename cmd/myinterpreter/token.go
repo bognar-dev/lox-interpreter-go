@@ -1,6 +1,8 @@
 package main
 
-import "strings"
+import (
+	"strings"
+)
 
 type TokenType string
 
@@ -215,7 +217,7 @@ const (
 
 type Literal struct {
 	literalType LiteralType
-	value       string
+	value       interface{}
 }
 type Token struct {
 	tokenType TokenType
@@ -224,12 +226,23 @@ type Token struct {
 	line      int
 }
 
+func (l Literal) String() string {
+	switch l.literalType {
+	case STRING_LITERAL:
+		return l.value.(string)
+	case NUMBER_LITERAL:
+		return l.value.(string)
+	default:
+	}
+	return ""
+}
+
 func (t Token) String() string {
 	if t.literal.literalType == STRING_LITERAL {
-		return t.tokenType.String() + " " + t.literal.value + " " + strings.Trim(t.literal.value, "\"")
+		return t.tokenType.String() + " " + t.literal.String() + " " + strings.Trim(t.literal.String(), "\"")
 	}
 	if t.literal.literalType == NUMBER_LITERAL {
-		return t.tokenType.String() + " " + t.literal.value + " numberliteral"
+		return t.tokenType.String() + " " + t.literal.String() + " " + t.literal.String()
 	}
 	return t.tokenType.String() + " " + t.lexeme + " null"
 }

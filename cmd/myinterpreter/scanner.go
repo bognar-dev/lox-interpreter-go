@@ -48,24 +48,20 @@ func (s *Scanner) advance() TokenType {
 }
 
 func (s *Scanner) createString() {
+	s.advance()
 	for s.peek() != PARENTHESES && !s.isAtEnd() {
 		if s.peek() == NEWLINE {
 			s.line++
 		}
+
 		s.advance()
 	}
-
-	if s.isAtEnd() {
+	str := s.source[s.start:s.current]
+	fmt.Println("String: ", str)
+	if s.isAtEnd() && str[len(str)-1] != '"' {
 		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Unterminated string.", s.line))
 		return
 	}
-
-	// The closing ".
-	s.advance()
-
-	// Trim the surrounding quotes.
-
-	str := s.source[s.start:s.current]
 	s.addToken(STRING, Literal{STRING_LITERAL, str})
 }
 

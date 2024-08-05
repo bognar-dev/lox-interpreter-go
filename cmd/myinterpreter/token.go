@@ -222,5 +222,11 @@ type Token struct {
 }
 
 func (t Token) String() string {
+	if t.literal.literalType == STRING_LITERAL {
+		return t.tokenType.String() + " " + t.literal.value
+	}
+	if t.literal.literalType == NUMBER_LITERAL {
+		return t.tokenType.String() + " " + t.literal.value
+	}
 	return t.tokenType.String() + " " + t.lexeme
 }

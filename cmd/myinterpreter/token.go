@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -228,13 +229,15 @@ type Token struct {
 
 func (l Literal) String() string {
 	switch l.literalType {
-	case STRING_LITERAL:
-		return l.value.(string)
 	case NUMBER_LITERAL:
-		return l.value.(string)
+		if l.value == float64(int(l.value.(float64))) {
+			return fmt.Sprintf("%.1f", l.value) // Ensures 1234.0 for whole numbers
+		} else {
+			return fmt.Sprintf("%g", l.value) // Keeps the precision for non-whole numbers
+		}
 	default:
+		return fmt.Sprintf("%v", l.value)
 	}
-	return ""
 }
 
 func (t Token) String() string {

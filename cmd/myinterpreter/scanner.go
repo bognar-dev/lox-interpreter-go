@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 type Scanner struct {
@@ -86,7 +87,12 @@ func (s *Scanner) createNumber() {
 		}
 	}
 	str := s.source[s.start : s.current-1]
-	s.addToken(NUMBER, Literal{NUMBER_LITERAL, str})
+	floatVal, err := strconv.ParseFloat(str, 64)
+	if err != nil {
+		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Invalid number: %s", s.line, str))
+		return
+	}
+	s.addToken(NUMBER, Literal{NUMBER_LITERAL, floatVal})
 }
 
 func (s *Scanner) printTokens(tokens []Token) {

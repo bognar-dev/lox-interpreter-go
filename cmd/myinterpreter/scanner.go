@@ -74,7 +74,7 @@ func (s *Scanner) createNumber() {
 			s.advance()
 		}
 	}
-	str := s.source[s.start : s.current-1]
+	str := s.source[s.start:s.current]
 	floatVal, err := strconv.ParseFloat(str, 64)
 	if err != nil {
 	}

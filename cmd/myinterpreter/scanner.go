@@ -148,7 +148,6 @@ func (s *Scanner) scanToken() {
 			for s.peek() != NEWLINE && !s.isAtEnd() {
 				s.advance()
 			}
-			s.line++
 		} else {
 			s.addToken(SLASH, Literal{})
 		}

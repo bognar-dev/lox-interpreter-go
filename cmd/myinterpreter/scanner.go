@@ -87,8 +87,9 @@ func (s *Scanner) createNumber() {
 			s.advance()
 		}
 	}
-	str := strings.Trim(s.source[s.start:s.current], "\r\n")
-	floatVal, err := strconv.ParseFloat(str, 64)
+	str := strings.Trim(s.source[s.start:s.current], "\r")
+	trimmedStr := strings.TrimSuffix(str, ".")
+	floatVal, err := strconv.ParseFloat(trimmedStr, 64)
 	if err != nil {
 	}
 	s.addToken(NUMBER, Literal{NUMBER_LITERAL, floatVal})

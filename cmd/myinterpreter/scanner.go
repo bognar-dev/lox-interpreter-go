@@ -25,7 +25,10 @@ func (s *Scanner) scanTokens() ([]Token, []error) {
 }
 
 func (s *Scanner) peek() TokenType {
-	return TokenType(s.source[s.current-1 : s.current])
+	if s.isAtEnd() {
+		return EOF
+	}
+	return TokenType(s.source[s.current])
 }
 
 func (s *Scanner) peekString() string {
@@ -66,24 +69,12 @@ func (s *Scanner) createString() {
 	s.addToken(STRING, Literal{STRING_LITERAL, str})
 }
 func (s *Scanner) createNumber() {
-	for s.isDigit(s.peek()) && !s.isAtEnd() {
+	for s.isDigit(s.peek()) {
 		s.advance()
 	}
-	var next TokenType
-	// Look for a fractional part.
-	if s.current >= len(s.source) {
-		next = s.peek()
-	} else {
-		next = s.peekNext()
-	}
-
-	curr := s.peek()
-
-	if curr == DOT && s.isDigit(next) {
-		// Consume the "."
+	if s.peek() == DOT && s.isDigit(s.peekNext()) {
 		s.advance()
-
-		for s.isDigit(s.peek()) && !s.isAtEnd() {
+		for s.isDigit(s.peek()) {
 			s.advance()
 		}
 	}

@@ -52,19 +52,21 @@ func (s *Scanner) advance() TokenType {
 }
 
 func (s *Scanner) createString() {
-	s.advance()
 	for s.peek() != PARENTHESES && !s.isAtEnd() {
 		if s.peek() == NEWLINE {
 			s.line++
 		}
-
 		s.advance()
 	}
-	str := s.source[s.start:s.current]
-	if s.isAtEnd() && str[len(str)-1] != '"' {
+	if s.isAtEnd() {
 		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Unterminated string.", s.line))
 		return
 	}
+	// Consume the final "
+	s.advance()
+	// trim quotes and add string token
+	str := s.source[s.start+1 : s.current-1]
+
 	s.addToken(STRING, Literal{STRING_LITERAL, str})
 }
 func (s *Scanner) createNumber() {

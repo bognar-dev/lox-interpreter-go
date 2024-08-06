@@ -199,7 +199,9 @@ func (s *Scanner) scanToken() {
 }
 
 func (s *Scanner) isAlpha(c TokenType) bool {
-	return c >= "a" && c <= "z" || c >= "A" && c <= "Z"
+	return (c >= "a" && c <= "z") ||
+		(c >= "A" && c <= "Z") ||
+		c == "_"
 }
 
 func (s *Scanner) isAlphaNumeric(c TokenType) bool {

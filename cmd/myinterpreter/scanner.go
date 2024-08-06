@@ -84,12 +84,12 @@ func (s *Scanner) createNumber() {
 	}
 	str := s.source[s.start:s.current]
 
-	_, err := strconv.ParseFloat(str, 64)
+	num, err := strconv.ParseFloat(str, 64)
 	if err != nil {
 		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Invalid number.", s.line))
 		return
 	}
-	s.addToken(NUMBER, Literal{STRING_LITERAL, str})
+	s.addToken(NUMBER, Literal{NUMBER_LITERAL, num})
 }
 
 func (s *Scanner) printTokens(tokens []Token) {

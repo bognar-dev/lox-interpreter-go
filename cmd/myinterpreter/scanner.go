@@ -92,11 +92,10 @@ func (s *Scanner) createNumber() {
 	trimmedStr := strings.TrimSuffix(str, ".")
 	floatVal, err := strconv.ParseFloat(trimmedStr, 64)
 	if err != nil {
+		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Invalid number.", s.line))
+		return
 	}
 	s.addToken(NUMBER, Literal{NUMBER_LITERAL, floatVal})
-	if strings.HasSuffix(str, ".") {
-		s.addToken(DOT, Literal{})
-	}
 }
 
 func (s *Scanner) printTokens(tokens []Token) {

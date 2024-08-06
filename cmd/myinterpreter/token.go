@@ -249,7 +249,7 @@ func (t Token) String() string {
 		return fmt.Sprintf("%s %v %s", t.tokenType.String(), t.literal.value, t.literal.String())
 	}
 	if t.literal.literalType == IDENTIFIER_LITERAL {
-		return fmt.Sprintf("%s %s %s", t.tokenType.String(), t.literal.value, t.literal.String())
+		return fmt.Sprintf("%s %s null", t.tokenType.String(), t.literal.value)
 	}
 	return t.tokenType.String() + " " + t.lexeme + " null"
 }

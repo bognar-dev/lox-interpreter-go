@@ -55,7 +55,7 @@ func (s *Scanner) createString() {
 		if s.peek() == NEWLINE {
 			s.line++
 		}
-		
+
 		s.advance()
 	}
 	str := s.source[s.start:s.current]
@@ -87,7 +87,7 @@ func (s *Scanner) createNumber() {
 			s.advance()
 		}
 	}
-	str := strings.Trim(s.source[s.start:s.current], "\r")
+	str := strings.Trim(s.source[s.start:s.current], "\r\n")
 	floatVal, err := strconv.ParseFloat(str, 64)
 	if err != nil {
 	}

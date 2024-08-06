@@ -35,7 +35,9 @@ func (s *Scanner) peekString() string {
 }
 
 func (s *Scanner) addToken(token TokenType, literal Literal) {
-	s.tokens = append(s.tokens, Token{token, tokenLoopUp[token], literal, s.line})
+	text := s.source[s.start:s.current]
+
+	s.tokens = append(s.tokens, Token{tokenType: token, lexeme: text, literal: literal, line: s.line})
 }
 
 func (s *Scanner) isAtEnd() bool {
@@ -82,12 +84,12 @@ func (s *Scanner) createNumber() {
 	}
 	str := s.source[s.start:s.current]
 
-	floatVal, err := strconv.ParseFloat(str, 64)
+	_, err := strconv.ParseFloat(str, 64)
 	if err != nil {
 		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Invalid number.", s.line))
 		return
 	}
-	s.addToken(NUMBER, Literal{NUMBER_LITERAL, floatVal})
+	s.addToken(NUMBER, Literal{STRING_LITERAL, str})
 }
 
 func (s *Scanner) printTokens(tokens []Token) {

@@ -245,7 +245,7 @@ func (t Token) String() string {
 		return t.tokenType.String() + " " + t.literal.String() + " " + strings.Trim(t.literal.String(), "\"")
 	}
 	if t.literal.literalType == NUMBER_LITERAL {
-		return t.tokenType.String() + " " + t.literal.String() + " " + t.literal.String()
+		return fmt.Sprintf("%s %v %s", t.tokenType.String(), t.literal.value, t.literal.String())
 	}
 	return t.tokenType.String() + " " + t.lexeme + " null"
 }

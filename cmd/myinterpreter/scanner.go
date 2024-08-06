@@ -88,6 +88,9 @@ func (s *Scanner) createNumber() {
 		}
 	}
 	str := strings.Trim(s.source[s.start:s.current], "\r")
+	if strings.HasSuffix(str, ".") {
+		s.addToken(DOT, Literal{})
+	}
 	trimmedStr := strings.TrimSuffix(str, ".")
 	floatVal, err := strconv.ParseFloat(trimmedStr, 64)
 	if err != nil {

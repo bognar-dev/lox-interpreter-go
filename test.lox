@@ -1,1 +1,2 @@
-_123foo world_ f00 baz 6az
+message = "Hello, World!"
+number = 123

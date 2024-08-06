@@ -35,9 +35,9 @@ const (
 	LESS_EQUAL TokenType = "<="
 
 	// Literals.
-	IDENTIFIER TokenType = "identifier"
-	STRING     TokenType = "string"
-	NUMBER     TokenType = "number"
+	IDENTIFIER TokenType = "IDENTIFIER"
+	STRING     TokenType = "STRING"
+	NUMBER     TokenType = "NUMBER"
 
 	// Keywords.
 	AND   TokenType = "and"

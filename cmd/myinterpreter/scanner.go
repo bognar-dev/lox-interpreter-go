@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"strconv"
-	"strings"
 )
 
 type Scanner struct {
@@ -72,16 +71,16 @@ func (s *Scanner) createNumber() {
 	for s.isDigit(s.peek()) {
 		s.advance()
 	}
+
 	if s.peek() == DOT && s.isDigit(s.peekNext()) {
 		s.advance()
 		for s.isDigit(s.peek()) {
 			s.advance()
 		}
 	}
-	str := strings.Trim(s.source[s.start:s.current], "\r")
+	str := s.source[s.start:s.current]
 
-	trimmedStr := strings.TrimSuffix(str, ".")
-	floatVal, err := strconv.ParseFloat(trimmedStr, 64)
+	floatVal, err := strconv.ParseFloat(str, 64)
 	if err != nil {
 		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Invalid number.", s.line))
 		return
@@ -113,7 +112,10 @@ func (s *Scanner) match(expected TokenType) bool {
 }
 
 func (s *Scanner) peekNext() TokenType {
-	return TokenType(s.source[s.current])
+	if s.current+1 >= len(s.source) {
+		return EOF
+	}
+	return TokenType(s.source[s.current+1])
 }
 
 func (s *Scanner) scanToken() {

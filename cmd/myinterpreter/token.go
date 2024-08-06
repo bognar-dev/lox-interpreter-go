@@ -214,6 +214,7 @@ const (
 	NONE LiteralType = iota
 	STRING_LITERAL
 	NUMBER_LITERAL
+	IDENTIFIER_LITERAL
 )
 
 type Literal struct {
@@ -246,6 +247,9 @@ func (t Token) String() string {
 	}
 	if t.literal.literalType == NUMBER_LITERAL {
 		return fmt.Sprintf("%s %v %s", t.tokenType.String(), t.literal.value, t.literal.String())
+	}
+	if t.literal.literalType == IDENTIFIER_LITERAL {
+		return fmt.Sprintf("%s %s %s", t.tokenType.String(), t.literal.value, t.literal.String())
 	}
 	return t.tokenType.String() + " " + t.lexeme + " null"
 }

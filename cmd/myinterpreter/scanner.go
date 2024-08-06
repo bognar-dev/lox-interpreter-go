@@ -189,8 +189,32 @@ func (s *Scanner) scanToken() {
 		if s.isDigit(c) {
 			s.createNumber()
 			return
+		} else if s.isAlpha(c) {
+			s.createIdentifier()
+			return
 		}
 		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Unexpected character: %s", s.line, s.peekString()))
 
 	}
+}
+
+func (s *Scanner) isAlpha(c TokenType) bool {
+	return c >= "a" && c <= "z" || c >= "A" && c <= "Z"
+}
+
+func (s *Scanner) isAlphaNumeric(c TokenType) bool {
+	return s.isAlpha(c) || s.isDigit(c)
+}
+
+func (s *Scanner) createIdentifier() {
+	for s.isAlphaNumeric(s.peek()) {
+		s.advance()
+	}
+	str := s.source[s.start:s.current]
+	tokenType := TokenType(str)
+	if tokenLoopUp[tokenType] != "" {
+		s.addToken(tokenType, Literal{})
+		return
+	}
+	s.addToken(IDENTIFIER, Literal{IDENTIFIER_LITERAL, str})
 }

@@ -236,13 +236,13 @@ func (l Literal) String() string {
 			return fmt.Sprintf("%g", l.value) // Keeps the precision for non-whole numbers
 		}
 	default:
-		return fmt.Sprintf("%v", l.value)
+		return fmt.Sprintf("\"%v\"", l.value)
 	}
 }
 
 func (t Token) String() string {
 	if t.literal.literalType == STRING_LITERAL {
-		return t.tokenType.String() + " " + t.literal.String() + " " + strings.Trim(t.literal.String(), "\"")
+		return fmt.Sprintf("%s %s %s", t.tokenType.String(), t.literal.String(), strings.Trim(t.literal.String(), "\""))
 	}
 	if t.literal.literalType == NUMBER_LITERAL {
 		return fmt.Sprintf("%s %v %s", t.tokenType.String(), t.literal.value, t.literal.String())

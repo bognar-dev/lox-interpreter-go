@@ -55,7 +55,7 @@ func (s *Scanner) createString() {
 		if s.peek() == NEWLINE {
 			s.line++
 		}
-
+		
 		s.advance()
 	}
 	str := s.source[s.start:s.current]

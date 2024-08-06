@@ -88,14 +88,15 @@ func (s *Scanner) createNumber() {
 		}
 	}
 	str := strings.Trim(s.source[s.start:s.current], "\r")
-	if strings.HasSuffix(str, ".") {
-		s.addToken(DOT, Literal{})
-	}
+
 	trimmedStr := strings.TrimSuffix(str, ".")
 	floatVal, err := strconv.ParseFloat(trimmedStr, 64)
 	if err != nil {
 	}
 	s.addToken(NUMBER, Literal{NUMBER_LITERAL, floatVal})
+	if strings.HasSuffix(str, ".") {
+		s.addToken(DOT, Literal{})
+	}
 }
 
 func (s *Scanner) printTokens(tokens []Token) {

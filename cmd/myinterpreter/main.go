@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/parsing"
+	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/scanning"
 	"os"
 )
 
@@ -16,11 +18,48 @@ func main() {
 
 	command := os.Args[1]
 
-	if command != "tokenize" {
+	switch command {
+	case "tokenize":
+		tokenize()
+	case "interpret":
+		evaluate()
+	default:
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", command)
 		os.Exit(1)
 	}
 
+}
+
+const (
+	errExitCode        = 1
+	lexicalErrExitCode = 65
+)
+
+func printErrorAndExit(err string, args ...any) {
+	_, _ = fmt.Fprintf(os.Stderr, err, args...)
+	os.Exit(errExitCode)
+}
+
+func openFile(path string) *os.File {
+	file, err := os.Open(path)
+
+	if err != nil {
+		printErrorAndExit("Error opening file: %v\n", err)
+	}
+
+	return file
+}
+
+func evaluate() {
+	filename := os.Args[2]
+	file := openFile(filename)
+	defer file.Close()
+
+	scanner := parsing.NewScanner(file)
+	scanner.Scan()
+}
+
+func tokenize() {
 	filename := os.Args[2]
 	rawfileContents, err := os.ReadFile(filename)
 	if err != nil {
@@ -28,16 +67,15 @@ func main() {
 		os.Exit(1)
 	}
 	source := string(rawfileContents)
-	scanner := Scanner{source: source, tokens: []Token{}, start: 0, current: 0, line: 1}
+	scanner := scanning.Scanner{Source: source, Tokens: []scanning.Token{}, Start: 0, Current: 0, Line: 1}
 	var errorList []error
-	var tokens []Token
-	tokens, errorList = scanner.scanTokens()
-	scanner.printTokens(tokens)
+	var tokens []scanning.Token
+	tokens, errorList = scanner.ScanTokens()
+	scanner.PrintTokens(tokens)
 	if len(errorList) != 0 {
 		for _, err := range errorList {
 			fmt.Fprintln(os.Stderr, err)
 		}
 		os.Exit(65)
 	}
-
 }

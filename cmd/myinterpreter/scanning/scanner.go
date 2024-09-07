@@ -1,4 +1,4 @@
-package main
+package scanning
 
 import (
 	"fmt"
@@ -6,68 +6,68 @@ import (
 )
 
 type Scanner struct {
-	source    string
-	tokens    []Token
-	start     int
-	current   int
-	line      int
-	errorList []error
+	Source    string
+	Tokens    []Token
+	Start     int
+	Current   int
+	Line      int
+	ErrorList []error
 }
 
-func (s *Scanner) scanTokens() ([]Token, []error) {
+func (s *Scanner) ScanTokens() ([]Token, []error) {
 	for !s.isAtEnd() {
-		s.start = s.current
-		s.scanToken()
+		s.Start = s.Current
+		s.ScanToken()
 	}
-	s.tokens = append(s.tokens, Token{EOF, "", Literal{}, s.line})
-	return s.tokens, s.errorList
+	s.Tokens = append(s.Tokens, Token{EOF, "", Literal{}, s.Line})
+	return s.Tokens, s.ErrorList
 }
 
 func (s *Scanner) peek() TokenType {
 	if s.isAtEnd() {
 		return EOF
 	}
-	return TokenType(s.source[s.current])
+	return TokenType(s.Source[s.Current])
 }
 
 func (s *Scanner) peekString() string {
-	return s.source[s.current-1 : s.current]
+	return s.Source[s.Current-1 : s.Current]
 }
 
 func (s *Scanner) addToken(token TokenType, literal Literal) {
-	text := s.source[s.start:s.current]
+	text := s.Source[s.Start:s.Current]
 
-	s.tokens = append(s.tokens, Token{tokenType: token, lexeme: text, literal: literal, line: s.line})
+	s.Tokens = append(s.Tokens, Token{tokenType: token, lexeme: text, literal: literal, line: s.Line})
 }
 
 func (s *Scanner) isAtEnd() bool {
-	return s.current >= len(s.source)
+	return s.Current >= len(s.Source)
 }
 
 func (s *Scanner) peekAt(pos int) TokenType {
-	return TokenType(s.source[pos])
+	return TokenType(s.Source[pos])
 }
 func (s *Scanner) advance() TokenType {
-	s.current++
+	s.Current++
 
-	return TokenType(s.source[s.current-1])
+	return TokenType(s.Source[s.Current-1])
 }
 
 func (s *Scanner) createString() {
 	for s.peek() != PARENTHESES && !s.isAtEnd() {
 		if s.peek() == NEWLINE {
-			s.line++
+			s.Line++
 		}
 		s.advance()
 	}
 	if s.isAtEnd() {
-		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Unterminated string.", s.line))
+		s.ErrorList = append(s.ErrorList, fmt.Errorf("[Line %d] Error: Unterminated string.", s.Line))
 		return
 	}
 	// Consume the final "
 	s.advance()
 	// trim quotes and add string token
-	str := s.source[s.start+1 : s.current-1]
+	str := s.Source[s.Start+1 : s.Current-1]
 
 	s.addToken(STRING, Literal{STRING_LITERAL, str})
 }
@@ -82,18 +82,18 @@ func (s *Scanner) createNumber() {
 			s.advance()
 		}
 	}
-	str := s.source[s.start:s.current]
+	str := s.Source[s.Start:s.Current]
 
 	num, err := strconv.ParseFloat(str, 64)
 	if err != nil {
-		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Invalid number.", s.line))
+		s.ErrorList = append(s.ErrorList, fmt.Errorf("[Line %d] Error: Invalid number.", s.Line))
 		return
 	}
 	s.addToken(NUMBER, Literal{NUMBER_LITERAL, num})
 }
 
-func (s *Scanner) printTokens(tokens []Token) {
-	for _, token := range tokens {
+func (s *Scanner) PrintTokens(Tokens []Token) {
+	for _, token := range Tokens {
 		fmt.Println(token.String())
 	}
 }
@@ -106,23 +106,23 @@ func (s *Scanner) match(expected TokenType) bool {
 	if s.isAtEnd() {
 		return false
 	}
-	peekVal := s.peekAt(s.current)
+	peekVal := s.peekAt(s.Current)
 	if peekVal != expected {
 		return false
 	}
 
-	s.current++
+	s.Current++
 	return true
 }
 
 func (s *Scanner) peekNext() TokenType {
-	if s.current+1 >= len(s.source) {
+	if s.Current+1 >= len(s.Source) {
 		return EOF
 	}
-	return TokenType(s.source[s.current+1])
+	return TokenType(s.Source[s.Current+1])
 }
 
-func (s *Scanner) scanToken() {
+func (s *Scanner) ScanToken() {
 	c := s.advance()
 	switch c {
 	case LEFT_PAREN:
@@ -183,7 +183,7 @@ func (s *Scanner) scanToken() {
 	case CARRIAGE_RETURN, WHITESPACE, TABULATOR:
 
 	case NEWLINE:
-		s.line++
+		s.Line++
 
 	case PARENTHESES:
 		s.createString()
@@ -195,7 +195,7 @@ func (s *Scanner) scanToken() {
 			s.createIdentifier()
 			return
 		}
-		s.errorList = append(s.errorList, fmt.Errorf("[line %d] Error: Unexpected character: %s", s.line, s.peekString()))
+		s.ErrorList = append(s.ErrorList, fmt.Errorf("[Line %d] Error: Unexpected character: %s", s.Line, s.peekString()))
 
 	}
 }
@@ -214,7 +214,7 @@ func (s *Scanner) createIdentifier() {
 	for s.isAlphaNumeric(s.peek()) {
 		s.advance()
 	}
-	str := s.source[s.start:s.current]
+	str := s.Source[s.Start:s.Current]
 	tokenType := TokenType(str)
 	if tokenLoopUp[tokenType] != "" {
 		s.addToken(tokenType, Literal{})

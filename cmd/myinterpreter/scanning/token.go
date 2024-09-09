@@ -222,10 +222,10 @@ type Literal struct {
 	value       interface{}
 }
 type Token struct {
-	tokenType TokenType
-	lexeme    string
-	literal   Literal
-	line      int
+	TokenType TokenType
+	Lexeme    string
+	Literal   Literal
+	Line      int
 }
 
 func (l Literal) String() string {
@@ -242,14 +242,14 @@ func (l Literal) String() string {
 }
 
 func (t Token) String() string {
-	if t.literal.literalType == STRING_LITERAL {
-		return fmt.Sprintf("%s %s %s", t.tokenType.String(), t.literal.String(), strings.Trim(t.literal.String(), "\""))
+	if t.Literal.literalType == STRING_LITERAL {
+		return fmt.Sprintf("%s %s %s", t.TokenType.String(), t.Literal.String(), strings.Trim(t.Literal.String(), "\""))
 	}
-	if t.literal.literalType == NUMBER_LITERAL {
-		return fmt.Sprintf("%s %s %s", t.tokenType.String(), t.lexeme, t.literal.String())
+	if t.Literal.literalType == NUMBER_LITERAL {
+		return fmt.Sprintf("%s %s %s", t.TokenType.String(), t.Lexeme, t.Literal.String())
 	}
-	if t.literal.literalType == IDENTIFIER_LITERAL {
-		return fmt.Sprintf("%s %s null", t.tokenType.String(), t.literal.value)
+	if t.Literal.literalType == IDENTIFIER_LITERAL {
+		return fmt.Sprintf("%s %s null", t.TokenType.String(), t.Literal.value)
 	}
-	return t.tokenType.String() + " " + t.lexeme + " null"
+	return t.TokenType.String() + " " + t.Lexeme + " null"
 }

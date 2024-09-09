@@ -55,8 +55,23 @@ func evaluate() {
 	file := openFile(filename)
 	defer file.Close()
 
-	scanner := parsing.NewScanner(file)
-	scanner.Scan()
+	rawfileContents, err := os.ReadFile(filename)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
+		os.Exit(1)
+	}
+	source := string(rawfileContents)
+
+	// Example expression using file contents
+	expr := &parsing.BinaryExpr{
+		Left:     &parsing.LiteralExpr{Value: source},
+		Operator: scanning.Token{TokenType: scanning.PLUS, Lexeme: "+"},
+		Right:    &parsing.LiteralExpr{Value: 2},
+	}
+
+	printer := &parsing.AstPrinter{}
+	result := expr.Accept(printer)
+	fmt.Println(result) // Output: (+ <file contents> 2)
 }
 
 func tokenize() {

@@ -38,7 +38,7 @@ func (s *Scanner) peekString() string {
 func (s *Scanner) addToken(token TokenType, literal Literal) {
 	text := s.Source[s.Start:s.Current]
 
-	s.Tokens = append(s.Tokens, Token{tokenType: token, lexeme: text, literal: literal, line: s.Line})
+	s.Tokens = append(s.Tokens, Token{TokenType: token, Lexeme: text, Literal: literal, Line: s.Line})
 }
 
 func (s *Scanner) isAtEnd() bool {
@@ -62,7 +62,7 @@ func (s *Scanner) createString() {
 		s.advance()
 	}
 	if s.isAtEnd() {
-		s.ErrorList = append(s.ErrorList, fmt.Errorf("[line %d] Error: Unterminated string.", s.Line))
+		s.ErrorList = append(s.ErrorList, fmt.Errorf("[Line %d] Error: Unterminated string.", s.Line))
 		return
 	}
 	// Consume the final "
@@ -87,7 +87,7 @@ func (s *Scanner) createNumber() {
 
 	num, err := strconv.ParseFloat(str, 64)
 	if err != nil {
-		s.ErrorList = append(s.ErrorList, fmt.Errorf("[line %d] Error: Invalid number.", s.Line))
+		s.ErrorList = append(s.ErrorList, fmt.Errorf("[Line %d] Error: Invalid number.", s.Line))
 		return
 	}
 	s.addToken(NUMBER, Literal{NUMBER_LITERAL, num})
@@ -201,7 +201,7 @@ func (s *Scanner) scanToken() {
 			s.createIdentifier()
 			return
 		}
-		s.ErrorList = append(s.ErrorList, fmt.Errorf("[line %d] Error: Unexpected character: %s", s.Line, s.peekString()))
+		s.ErrorList = append(s.ErrorList, fmt.Errorf("[Line %d] Error: Unexpected character: %s", s.Line, s.peekString()))
 
 	}
 }

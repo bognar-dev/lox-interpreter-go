@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/parsing"
 	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/scanning"
+	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/tokens"
 	"os"
 )
 
@@ -23,6 +23,8 @@ func main() {
 		tokenize()
 	case "evaluate":
 		evaluate()
+	case "parse":
+		parse()
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", command)
 		os.Exit(1)
@@ -51,33 +53,11 @@ func openFile(path string) *os.File {
 }
 
 func evaluate() {
-	filename := os.Args[2]
-	file := openFile(filename)
-	defer file.Close()
+	printErrorAndExit("Not Implemented")
+}
 
-	rawfileContents, err := os.ReadFile(filename)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
-		os.Exit(1)
-	}
-	source := string(rawfileContents)
-
-	// Tokenize the source code
-	scanner := scanning.Scanner{Source: source, Tokens: []scanning.Token{}, Start: 0, Current: 0, Line: 1}
-	tokens, errorList := scanner.ScanTokens()
-	if len(errorList) != 0 {
-		for _, err := range errorList {
-			fmt.Fprintln(os.Stderr, err)
-		}
-		os.Exit(lexicalErrExitCode)
-	}
-
-	// Evaluate the tokens
-	evaluator := &parsing.Evaluator{}
-	for _, token := range tokens {
-		result := evaluator.VisitLiteralExpr(&parsing.LiteralExpr{Value: token.Lexeme})
-		fmt.Println(result)
-	}
+func parse() {
+	printErrorAndExit("Not Implemented")
 }
 
 func tokenize() {
@@ -88,9 +68,9 @@ func tokenize() {
 		os.Exit(1)
 	}
 	source := string(rawfileContents)
-	scanner := scanning.Scanner{Source: source, Tokens: []scanning.Token{}, Start: 0, Current: 0, Line: 1}
+	scanner := scanning.Scanner{Source: source, Tokens: []tokens.Token{}, Start: 0, Current: 0, Line: 1}
 	var errorList []error
-	var tokens []scanning.Token
+	var tokens []tokens.Token
 	tokens, errorList = scanner.ScanTokens()
 	scanner.PrintTokens(tokens)
 	if len(errorList) != 0 {

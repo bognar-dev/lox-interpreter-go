@@ -1,4 +1,4 @@
-package scanning
+package tokens
 
 import (
 	"fmt"
@@ -153,7 +153,7 @@ func (t TokenType) String() string {
 	return string(t)
 }
 
-var tokenLoopUp = map[TokenType]string{
+var TokenLoopUp = map[TokenType]string{
 	LEFT_PAREN:  "(",
 	RIGHT_PAREN: ")",
 	LEFT_BRACE:  "{",
@@ -211,15 +211,15 @@ var tokenLoopUp = map[TokenType]string{
 type LiteralType int
 
 const (
-	NONE LiteralType = iota
-	STRING_LITERAL
-	NUMBER_LITERAL
-	IDENTIFIER_LITERAL
+	NONE               LiteralType = 0
+	STRING_LITERAL                 = 1
+	NUMBER_LITERAL                 = 2
+	IDENTIFIER_LITERAL             = 3
 )
 
 type Literal struct {
-	literalType LiteralType
-	value       interface{}
+	LiteralType LiteralType
+	Value       interface{}
 }
 type Token struct {
 	TokenType TokenType
@@ -229,27 +229,27 @@ type Token struct {
 }
 
 func (l Literal) String() string {
-	switch l.literalType {
+	switch l.LiteralType {
 	case NUMBER_LITERAL:
-		if l.value == float64(int(l.value.(float64))) {
-			return fmt.Sprintf("%.1f", l.value) // Ensures 1234.0 for whole numbers
+		if l.Value == float64(int(l.Value.(float64))) {
+			return fmt.Sprintf("%.1f", l.Value) // Ensures 1234.0 for whole numbers
 		} else {
-			return fmt.Sprintf("%g", l.value) // Keeps the precision for non-whole numbers
+			return fmt.Sprintf("%g", l.Value) // Keeps the precision for non-whole numbers
 		}
 	default:
-		return fmt.Sprintf("\"%v\"", l.value)
+		return fmt.Sprintf("\"%v\"", l.Value)
 	}
 }
 
 func (t Token) String() string {
-	if t.Literal.literalType == STRING_LITERAL {
+	if t.Literal.LiteralType == STRING_LITERAL {
 		return fmt.Sprintf("%s %s %s", t.TokenType.String(), t.Literal.String(), strings.Trim(t.Literal.String(), "\""))
 	}
-	if t.Literal.literalType == NUMBER_LITERAL {
+	if t.Literal.LiteralType == NUMBER_LITERAL {
 		return fmt.Sprintf("%s %s %s", t.TokenType.String(), t.Lexeme, t.Literal.String())
 	}
-	if t.Literal.literalType == IDENTIFIER_LITERAL {
-		return fmt.Sprintf("%s %s null", t.TokenType.String(), t.Literal.value)
+	if t.Literal.LiteralType == IDENTIFIER_LITERAL {
+		return fmt.Sprintf("%s %s null", t.TokenType.String(), t.Literal.Value)
 	}
 	return t.TokenType.String() + " " + t.Lexeme + " null"
 }

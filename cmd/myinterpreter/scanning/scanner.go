@@ -2,61 +2,62 @@ package scanning
 
 import (
 	"fmt"
+	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/tokens"
 	"os"
 	"strconv"
 )
 
 type Scanner struct {
 	Source    string
-	Tokens    []Token
+	Tokens    []tokens.Token
 	Start     int
 	Current   int
 	Line      int
 	ErrorList []error
 }
 
-func (s *Scanner) ScanTokens() ([]Token, []error) {
+func (s *Scanner) ScanTokens() ([]tokens.Token, []error) {
 	for !s.isAtEnd() {
 		s.Start = s.Current
 		s.scanToken()
 	}
-	s.Tokens = append(s.Tokens, Token{EOF, "", Literal{}, s.Line})
+	s.Tokens = append(s.Tokens, tokens.Token{tokens.EOF, "", tokens.Literal{}, s.Line})
 	return s.Tokens, s.ErrorList
 }
 
-func (s *Scanner) peek() TokenType {
+func (s *Scanner) peek() tokens.TokenType {
 	if s.isAtEnd() {
-		return EOF
+		return tokens.EOF
 	}
-	return TokenType(s.Source[s.Current])
+	return tokens.TokenType(s.Source[s.Current])
 }
 
 func (s *Scanner) peekString() string {
 	return s.Source[s.Current-1 : s.Current]
 }
 
-func (s *Scanner) addToken(token TokenType, literal Literal) {
+func (s *Scanner) addToken(token tokens.TokenType, literal tokens.Literal) {
 	text := s.Source[s.Start:s.Current]
 
-	s.Tokens = append(s.Tokens, Token{TokenType: token, Lexeme: text, Literal: literal, Line: s.Line})
+	s.Tokens = append(s.Tokens, tokens.Token{TokenType: token, Lexeme: text, Literal: literal, Line: s.Line})
 }
 
 func (s *Scanner) isAtEnd() bool {
 	return s.Current >= len(s.Source)
 }
 
-func (s *Scanner) peekAt(pos int) TokenType {
-	return TokenType(s.Source[pos])
+func (s *Scanner) peekAt(pos int) tokens.TokenType {
+	return tokens.TokenType(s.Source[pos])
 }
-func (s *Scanner) advance() TokenType {
+func (s *Scanner) advance() tokens.TokenType {
 	s.Current++
 
-	return TokenType(s.Source[s.Current-1])
+	return tokens.TokenType(s.Source[s.Current-1])
 }
 
 func (s *Scanner) createString() {
-	for s.peek() != PARENTHESES && !s.isAtEnd() {
-		if s.peek() == NEWLINE {
+	for s.peek() != tokens.PARENTHESES && !s.isAtEnd() {
+		if s.peek() == tokens.NEWLINE {
 			s.Line++
 		}
 		s.advance()
@@ -70,14 +71,14 @@ func (s *Scanner) createString() {
 	// trim quotes and add string token
 	str := s.Source[s.Start+1 : s.Current-1]
 
-	s.addToken(STRING, Literal{STRING_LITERAL, str})
+	s.addToken(tokens.STRING, tokens.Literal{tokens.STRING_LITERAL, str})
 }
 func (s *Scanner) createNumber() {
 	for s.isDigit(s.peek()) {
 		s.advance()
 	}
 
-	if s.peek() == DOT && s.isDigit(s.peekNext()) {
+	if s.peek() == tokens.DOT && s.isDigit(s.peekNext()) {
 		s.advance()
 		for s.isDigit(s.peek()) {
 			s.advance()
@@ -90,10 +91,10 @@ func (s *Scanner) createNumber() {
 		s.ErrorList = append(s.ErrorList, fmt.Errorf("[Line %d] Error: Invalid number.", s.Line))
 		return
 	}
-	s.addToken(NUMBER, Literal{NUMBER_LITERAL, num})
+	s.addToken(tokens.NUMBER, tokens.Literal{tokens.NUMBER_LITERAL, num})
 }
 
-func (s *Scanner) PrintTokens(tokens []Token) {
+func (s *Scanner) PrintTokens(tokens []tokens.Token) {
 
 	for _, err := range s.ErrorList {
 		fmt.Fprintln(os.Stderr, err)
@@ -104,11 +105,11 @@ func (s *Scanner) PrintTokens(tokens []Token) {
 	}
 }
 
-func (s *Scanner) isDigit(c TokenType) bool {
+func (s *Scanner) isDigit(c tokens.TokenType) bool {
 	return c >= "0" && c <= "9"
 }
 
-func (s *Scanner) match(expected TokenType) bool {
+func (s *Scanner) match(expected tokens.TokenType) bool {
 	if s.isAtEnd() {
 		return false
 	}
@@ -121,77 +122,77 @@ func (s *Scanner) match(expected TokenType) bool {
 	return true
 }
 
-func (s *Scanner) peekNext() TokenType {
+func (s *Scanner) peekNext() tokens.TokenType {
 	if s.Current+1 >= len(s.Source) {
-		return EOF
+		return tokens.EOF
 	}
-	return TokenType(s.Source[s.Current+1])
+	return tokens.TokenType(s.Source[s.Current+1])
 }
 
 func (s *Scanner) scanToken() {
 	c := s.advance()
 	switch c {
-	case LEFT_PAREN:
-		s.addToken(LEFT_PAREN, Literal{})
-	case RIGHT_PAREN:
-		s.addToken(RIGHT_PAREN, Literal{})
-	case LEFT_BRACE:
-		s.addToken(LEFT_BRACE, Literal{})
-	case RIGHT_BRACE:
-		s.addToken(RIGHT_BRACE, Literal{})
-	case STAR:
-		s.addToken(STAR, Literal{})
-	case DOT:
-		s.addToken(DOT, Literal{})
-	case COMMA:
-		s.addToken(COMMA, Literal{})
-	case PLUS:
-		s.addToken(PLUS, Literal{})
-	case MINUS:
-		s.addToken(MINUS, Literal{})
-	case SEMICOLON:
-		s.addToken(SEMICOLON, Literal{})
-	case SLASH:
-		if s.match(SLASH) {
-			for s.peek() != NEWLINE && !s.isAtEnd() {
+	case tokens.LEFT_PAREN:
+		s.addToken(tokens.LEFT_PAREN, tokens.Literal{})
+	case tokens.RIGHT_PAREN:
+		s.addToken(tokens.RIGHT_PAREN, tokens.Literal{})
+	case tokens.LEFT_BRACE:
+		s.addToken(tokens.LEFT_BRACE, tokens.Literal{})
+	case tokens.RIGHT_BRACE:
+		s.addToken(tokens.RIGHT_BRACE, tokens.Literal{})
+	case tokens.STAR:
+		s.addToken(tokens.STAR, tokens.Literal{})
+	case tokens.DOT:
+		s.addToken(tokens.DOT, tokens.Literal{})
+	case tokens.COMMA:
+		s.addToken(tokens.COMMA, tokens.Literal{})
+	case tokens.PLUS:
+		s.addToken(tokens.PLUS, tokens.Literal{})
+	case tokens.MINUS:
+		s.addToken(tokens.MINUS, tokens.Literal{})
+	case tokens.SEMICOLON:
+		s.addToken(tokens.SEMICOLON, tokens.Literal{})
+	case tokens.SLASH:
+		if s.match(tokens.SLASH) {
+			for s.peek() != tokens.NEWLINE && !s.isAtEnd() {
 				s.advance()
 			}
 		} else {
-			s.addToken(SLASH, Literal{})
+			s.addToken(tokens.SLASH, tokens.Literal{})
 		}
 
-	case EOF:
-		s.addToken(EOF, Literal{})
-	case EQUAL:
-		if s.match(EQUAL) {
-			s.addToken(EQUAL_EQUAL, Literal{})
+	case tokens.EOF:
+		s.addToken(tokens.EOF, tokens.Literal{})
+	case tokens.EQUAL:
+		if s.match(tokens.EQUAL) {
+			s.addToken(tokens.EQUAL_EQUAL, tokens.Literal{})
 		} else {
-			s.addToken(EQUAL, Literal{})
+			s.addToken(tokens.EQUAL, tokens.Literal{})
 		}
-	case BANG:
-		if s.match(EQUAL) {
-			s.addToken(BANG_EQUAL, Literal{})
+	case tokens.BANG:
+		if s.match(tokens.EQUAL) {
+			s.addToken(tokens.BANG_EQUAL, tokens.Literal{})
 		} else {
-			s.addToken(BANG, Literal{})
+			s.addToken(tokens.BANG, tokens.Literal{})
 		}
-	case GREATER:
-		if s.match(EQUAL) {
-			s.addToken(GREATER_EQUAL, Literal{})
+	case tokens.GREATER:
+		if s.match(tokens.EQUAL) {
+			s.addToken(tokens.GREATER_EQUAL, tokens.Literal{})
 		} else {
-			s.addToken(GREATER, Literal{})
+			s.addToken(tokens.GREATER, tokens.Literal{})
 		}
-	case LESS:
-		if s.match(EQUAL) {
-			s.addToken(LESS_EQUAL, Literal{})
+	case tokens.LESS:
+		if s.match(tokens.EQUAL) {
+			s.addToken(tokens.LESS_EQUAL, tokens.Literal{})
 		} else {
-			s.addToken(LESS, Literal{})
+			s.addToken(tokens.LESS, tokens.Literal{})
 		}
-	case CARRIAGE_RETURN, WHITESPACE, TABULATOR:
+	case tokens.CARRIAGE_RETURN, tokens.WHITESPACE, tokens.TABULATOR:
 
-	case NEWLINE:
+	case tokens.NEWLINE:
 		s.Line++
 
-	case PARENTHESES:
+	case tokens.PARENTHESES:
 		s.createString()
 	default:
 		if s.isDigit(c) {
@@ -206,13 +207,13 @@ func (s *Scanner) scanToken() {
 	}
 }
 
-func (s *Scanner) isAlpha(c TokenType) bool {
+func (s *Scanner) isAlpha(c tokens.TokenType) bool {
 	return (c >= "a" && c <= "z") ||
 		(c >= "A" && c <= "Z") ||
 		c == "_"
 }
 
-func (s *Scanner) isAlphaNumeric(c TokenType) bool {
+func (s *Scanner) isAlphaNumeric(c tokens.TokenType) bool {
 	return s.isAlpha(c) || s.isDigit(c)
 }
 
@@ -221,10 +222,13 @@ func (s *Scanner) createIdentifier() {
 		s.advance()
 	}
 	str := s.Source[s.Start:s.Current]
-	tokenType := TokenType(str)
-	if tokenLoopUp[tokenType] != "" {
-		s.addToken(tokenType, Literal{})
+	tokenType := tokens.TokenType(str)
+	if tokens.TokenLoopUp[tokenType] != "" {
+		s.addToken(tokenType, tokens.Literal{})
 		return
 	}
-	s.addToken(IDENTIFIER, Literal{IDENTIFIER_LITERAL, str})
+	s.addToken(tokens.IDENTIFIER, tokens.Literal{
+		LiteralType: tokens.IDENTIFIER_LITERAL,
+		Value:       str,
+	})
 }

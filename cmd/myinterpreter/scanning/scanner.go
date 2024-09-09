@@ -87,7 +87,7 @@ func (s *Scanner) createNumber() {
 
 	num, err := strconv.ParseFloat(str, 64)
 	if err != nil {
-		s.ErrorList = append(s.ErrorList, fmt.Errorf("[Line %d] Error: Invalid number.", s.Line))
+		s.ErrorList = append(s.ErrorList, fmt.Errorf("[line %d] Error: Invalid number.", s.Line))
 		return
 	}
 	s.addToken(NUMBER, Literal{NUMBER_LITERAL, num})
@@ -201,7 +201,7 @@ func (s *Scanner) scanToken() {
 			s.createIdentifier()
 			return
 		}
-		s.ErrorList = append(s.ErrorList, fmt.Errorf("[Line %d] Error: Unexpected character: %s", s.Line, s.peekString()))
+		s.ErrorList = append(s.ErrorList, fmt.Errorf("[line %d] Error: Unexpected character: %s", s.Line, s.peekString()))
 
 	}
 }

@@ -2,6 +2,7 @@ package scanning
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 )
 
@@ -93,6 +94,11 @@ func (s *Scanner) createNumber() {
 }
 
 func (s *Scanner) PrintTokens(tokens []Token) {
+
+	for _, err := range s.ErrorList {
+		fmt.Fprintln(os.Stderr, err)
+	}
+
 	for _, token := range tokens {
 		fmt.Println(token.String())
 	}

@@ -73,9 +73,7 @@ func tokenize() {
 	tokens, errorList = scanner.ScanTokens()
 	scanner.PrintTokens(tokens)
 	if len(errorList) != 0 {
-		for _, err := range errorList {
-			fmt.Fprintln(os.Stderr, err)
-		}
+
 		os.Exit(lexicalErrExitCode)
 	}
 }

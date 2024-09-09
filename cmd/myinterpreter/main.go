@@ -76,6 +76,6 @@ func tokenize() {
 		for _, err := range errorList {
 			fmt.Fprintln(os.Stderr, err)
 		}
-		os.Exit(65)
+		os.Exit(lexicalErrExitCode)
 	}
 }

@@ -62,16 +62,22 @@ func evaluate() {
 	}
 	source := string(rawfileContents)
 
-	// Example expression using file contents
-	expr := &parsing.BinaryExpr{
-		Left:     &parsing.LiteralExpr{Value: source},
-		Operator: scanning.Token{TokenType: scanning.PLUS, Lexeme: "+"},
-		Right:    &parsing.LiteralExpr{Value: 2},
+	// Tokenize the source code
+	scanner := scanning.Scanner{Source: source, Tokens: []scanning.Token{}, Start: 0, Current: 0, Line: 1}
+	tokens, errorList := scanner.ScanTokens()
+	if len(errorList) != 0 {
+		for _, err := range errorList {
+			fmt.Fprintln(os.Stderr, err)
+		}
+		os.Exit(lexicalErrExitCode)
 	}
 
-	printer := &parsing.AstPrinter{}
-	result := expr.Accept(printer)
-	fmt.Println(result) // Output: (+ <file contents> 2)
+	// Evaluate the tokens
+	evaluator := &parsing.Evaluator{}
+	for _, token := range tokens {
+		result := evaluator.VisitLiteralExpr(&parsing.LiteralExpr{Value: token.Lexeme})
+		fmt.Println(result)
+	}
 }
 
 func tokenize() {

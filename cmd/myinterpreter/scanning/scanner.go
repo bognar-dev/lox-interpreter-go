@@ -62,7 +62,7 @@ func (s *Scanner) createString() {
 		s.advance()
 	}
 	if s.isAtEnd() {
-		s.ErrorList = append(s.ErrorList, fmt.Errorf("[Line %d] Error: Unterminated string.", s.Line))
+		s.ErrorList = append(s.ErrorList, fmt.Errorf("[line %d] Error: Unterminated string.", s.Line))
 		return
 	}
 	// Consume the final "

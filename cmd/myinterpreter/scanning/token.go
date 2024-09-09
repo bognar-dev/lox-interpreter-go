@@ -21,7 +21,7 @@ const (
 	SLASH     TokenType = "/"
 	STAR      TokenType = "*"
 
-	// One or two character tokens.
+	// One or two character Tokens.
 	BANG       TokenType = "!"
 	BANG_EQUAL TokenType = "!="
 
@@ -167,7 +167,7 @@ var tokenLoopUp = map[TokenType]string{
 	SLASH:     "/",
 	STAR:      "*",
 
-	// One or two character tokens.
+	// One or two character Tokens.
 	BANG:       "!",
 	BANG_EQUAL: "!=",
 

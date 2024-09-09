@@ -17,7 +17,7 @@ type Scanner struct {
 func (s *Scanner) ScanTokens() ([]Token, []error) {
 	for !s.isAtEnd() {
 		s.Start = s.Current
-		s.ScanToken()
+		s.scanToken()
 	}
 	s.Tokens = append(s.Tokens, Token{EOF, "", Literal{}, s.Line})
 	return s.Tokens, s.ErrorList
@@ -92,8 +92,8 @@ func (s *Scanner) createNumber() {
 	s.addToken(NUMBER, Literal{NUMBER_LITERAL, num})
 }
 
-func (s *Scanner) PrintTokens(Tokens []Token) {
-	for _, token := range Tokens {
+func (s *Scanner) PrintTokens(tokens []Token) {
+	for _, token := range tokens {
 		fmt.Println(token.String())
 	}
 }
@@ -122,7 +122,7 @@ func (s *Scanner) peekNext() TokenType {
 	return TokenType(s.Source[s.Current+1])
 }
 
-func (s *Scanner) ScanToken() {
+func (s *Scanner) scanToken() {
 	c := s.advance()
 	switch c {
 	case LEFT_PAREN:

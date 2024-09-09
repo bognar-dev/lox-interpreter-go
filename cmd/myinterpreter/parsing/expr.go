@@ -1,7 +1,7 @@
 package parsing
 
 import (
-	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/scanning"
+	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/tokens"
 )
 
 type Expr interface {
@@ -18,7 +18,7 @@ func (l *LiteralExpr) Accept(visitor Visitor) any {
 
 type BinaryExpr struct {
 	Left     Expr
-	Operator scanning.Token
+	Operator tokens.Token
 	Right    Expr
 }
 
@@ -27,7 +27,7 @@ func (b *BinaryExpr) Accept(visitor Visitor) any {
 }
 
 type UnaryExpr struct {
-	Operator scanning.Token
+	Operator tokens.Token
 	Right    Expr
 }
 

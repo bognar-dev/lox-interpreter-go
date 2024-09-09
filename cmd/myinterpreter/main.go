@@ -73,7 +73,6 @@ func tokenize() {
 	tokens, errorList = scanner.ScanTokens()
 	scanner.PrintTokens(tokens)
 	if len(errorList) != 0 {
-
 		os.Exit(lexicalErrExitCode)
 	}
 }

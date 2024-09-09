@@ -21,7 +21,7 @@ func main() {
 	switch command {
 	case "tokenize":
 		tokenize()
-	case "interpret":
+	case "evaluate":
 		evaluate()
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", command)
